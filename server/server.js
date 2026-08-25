@@ -35,14 +35,20 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/data', express.static(path.join(__dirname, '..', 'data')));
 
 /* ---------- Nodemailer Transporter ---------- */
+const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
+const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
+const SMTP_PORT = parseInt(process.env.SMTP_PORT, 10) || 587;
+const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT, 10) || 587,
+  host: SMTP_HOST,
+  port: SMTP_PORT,
   secure: false,
   requireTLS: true,
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: SMTP_USER,
+    pass: SMTP_PASS,
   },
   tls: {
     rejectUnauthorized: false,
@@ -515,17 +521,11 @@ app.post('/api/send-report', async (req, res) => {
       return res.status(400).json({ error: 'Missing subject or html in request body.' });
     }
 
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      return res.status(500).json({
-        error: 'SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS in .env file.',
-      });
-    }
-
     const recipients = getRecipients();
     const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
 
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from: SMTP_FROM,
       to: toList,
       subject,
       html,
@@ -573,11 +573,6 @@ cron.schedule(CRON_SCHEDULE, async () => {
   console.log(`⏰ Cron triggered at ${new Date().toISOString()} — sending daily sales report...`);
 
   try {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.warn('⚠️ SMTP credentials not set in .env. Skipping automated cron email.');
-      return;
-    }
-
     const allData = getAllReportData();
     const today = allData[allData.length - 1];
     const d = new Date(today.date + 'T00:00:00');
@@ -590,7 +585,7 @@ cron.schedule(CRON_SCHEDULE, async () => {
     const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
 
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      from: SMTP_FROM,
       to: toList,
       subject: `📈 Daily Sales Report — ${dateStr} [${fmtINR(today.totalRevenue)}]`,
       html,
