@@ -2241,17 +2241,17 @@
   },
   {
     "date": "2026-08-25",
-    "totalRevenue": 164560,
-    "salesCount": 16,
-    "transactions": 16,
+    "totalRevenue": 216276,
+    "salesCount": 21,
+    "transactions": 21,
     "agents": {
       "Shashank Tiwari": {
         "revenue": 15500,
         "count": 2
       },
       "Shubham Rai": {
-        "revenue": 12216,
-        "count": 1
+        "revenue": 34216,
+        "count": 3
       },
       "Vikas Poonia": {
         "revenue": 27092,
@@ -2274,8 +2274,8 @@
         "count": 1
       },
       "Abhijeet Mathur": {
-        "revenue": 12000,
-        "count": 1
+        "revenue": 16500,
+        "count": 2
       },
       "Chhaya Patel": {
         "revenue": 11000,
@@ -2286,8 +2286,8 @@
         "count": 1
       },
       "Honey Talreja": {
-        "revenue": 11000,
-        "count": 1
+        "revenue": 36216,
+        "count": 3
       },
       "Jivesh Harde": {
         "revenue": 11000,
@@ -2296,18 +2296,18 @@
     },
     "plans": {
       "Quarterly Max": {
-        "revenue": 9000,
-        "count": 2
+        "revenue": 13500,
+        "count": 3
       },
       "Annual Max": {
-        "revenue": 155560,
-        "count": 14
+        "revenue": 202776,
+        "count": 18
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 116716,
-        "count": 11
+        "revenue": 168432,
+        "count": 16
       },
       "Renewals": {
         "revenue": 47844,
