@@ -1002,12 +1002,12 @@
     },
     "userBreakdown": {
       "signups": 1980,
-      "serviceable": 1082,
-      "serviceableWithPct": "1,082 (54.6%)",
-      "serviceablePct": "54.6%",
-      "toyViewed": "677 (62.57%)",
-      "planPage": "299 (27.63%)",
-      "checkoutDrop": "275 (25.42%)",
+      "serviceable": 1083,
+      "serviceableWithPct": "1,083 (54.7%)",
+      "serviceablePct": "54.7%",
+      "toyViewed": "677 (62.51%)",
+      "planPage": "300 (27.70%)",
+      "checkoutDrop": "276 (25.48%)",
       "paymentDropout": "10 (0.92%)",
       "won": "21 (1.94%)"
     }
@@ -1156,14 +1156,14 @@
     },
     "userBreakdown": {
       "signups": 1490,
-      "serviceable": 752,
-      "serviceableWithPct": "752 (50.5%)",
+      "serviceable": 753,
+      "serviceableWithPct": "753 (50.5%)",
       "serviceablePct": "50.5%",
-      "toyViewed": "430 (57.18%)",
-      "planPage": "270 (35.90%)",
-      "checkoutDrop": "186 (24.73%)",
+      "toyViewed": "430 (57.10%)",
+      "planPage": "271 (35.99%)",
+      "checkoutDrop": "187 (24.83%)",
       "paymentDropout": "7 (0.93%)",
-      "won": "16 (2.13%)"
+      "won": "16 (2.12%)"
     }
   },
   {
@@ -1353,7 +1353,7 @@
       "serviceable": 768,
       "serviceableWithPct": "768 (57.4%)",
       "serviceablePct": "57.4%",
-      "toyViewed": "498 (64.84%)",
+      "toyViewed": "499 (64.97%)",
       "planPage": "384 (50.00%)",
       "checkoutDrop": "190 (24.74%)",
       "paymentDropout": "11 (1.43%)",
@@ -1551,7 +1551,7 @@
       "serviceable": 645,
       "serviceableWithPct": "645 (58.4%)",
       "serviceablePct": "58.4%",
-      "toyViewed": "400 (62.02%)",
+      "toyViewed": "401 (62.17%)",
       "planPage": "299 (46.36%)",
       "checkoutDrop": "152 (23.57%)",
       "paymentDropout": "4 (0.62%)",
@@ -1915,7 +1915,7 @@
       "serviceable": 894,
       "serviceableWithPct": "894 (57.2%)",
       "serviceablePct": "57.2%",
-      "toyViewed": "532 (59.51%)",
+      "toyViewed": "533 (59.62%)",
       "planPage": "410 (45.86%)",
       "checkoutDrop": "212 (23.71%)",
       "paymentDropout": "10 (1.12%)",
@@ -2022,7 +2022,7 @@
       "planPage": "379 (43.97%)",
       "checkoutDrop": "185 (21.46%)",
       "paymentDropout": "8 (0.93%)",
-      "won": "18 (2.09%)"
+      "won": "19 (2.20%)"
     }
   },
   {
@@ -2134,12 +2134,12 @@
     },
     "userBreakdown": {
       "signups": 1511,
-      "serviceable": 793,
-      "serviceableWithPct": "793 (52.5%)",
+      "serviceable": 794,
+      "serviceableWithPct": "794 (52.5%)",
       "serviceablePct": "52.5%",
-      "toyViewed": "538 (67.84%)",
-      "planPage": "404 (50.95%)",
-      "checkoutDrop": "176 (22.19%)",
+      "toyViewed": "539 (67.88%)",
+      "planPage": "405 (51.01%)",
+      "checkoutDrop": "177 (22.29%)",
       "paymentDropout": "11 (1.39%)",
       "won": "17 (2.14%)"
     }
@@ -2229,12 +2229,12 @@
     },
     "userBreakdown": {
       "signups": 1871,
-      "serviceable": 878,
-      "serviceableWithPct": "878 (46.9%)",
+      "serviceable": 877,
+      "serviceableWithPct": "877 (46.9%)",
       "serviceablePct": "46.9%",
-      "toyViewed": "563 (64.12%)",
-      "planPage": "397 (45.22%)",
-      "checkoutDrop": "210 (23.92%)",
+      "toyViewed": "563 (64.20%)",
+      "planPage": "397 (45.27%)",
+      "checkoutDrop": "210 (23.95%)",
       "paymentDropout": "3 (0.34%)",
       "won": "10 (1.14%)"
     }
@@ -2299,15 +2299,15 @@
       }
     },
     "userBreakdown": {
-      "signups": 1341,
-      "serviceable": 654,
-      "serviceableWithPct": "654 (48.8%)",
-      "serviceablePct": "48.8%",
-      "toyViewed": "355 (54.28%)",
-      "planPage": "271 (41.44%)",
-      "checkoutDrop": "136 (20.80%)",
-      "paymentDropout": "3 (0.46%)",
-      "won": "5 (0.76%)"
+      "signups": 1522,
+      "serviceable": 756,
+      "serviceableWithPct": "756 (49.7%)",
+      "serviceablePct": "49.7%",
+      "toyViewed": "415 (54.89%)",
+      "planPage": "312 (41.27%)",
+      "checkoutDrop": "161 (21.30%)",
+      "paymentDropout": "4 (0.53%)",
+      "won": "10 (1.32%)"
     }
   }
 ]
