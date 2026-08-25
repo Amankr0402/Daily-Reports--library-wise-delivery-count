@@ -2241,9 +2241,9 @@
   },
   {
     "date": "2026-08-25",
-    "totalRevenue": 216276,
-    "salesCount": 21,
-    "transactions": 21,
+    "totalRevenue": 227276,
+    "salesCount": 22,
+    "transactions": 22,
     "agents": {
       "Shashank Tiwari": {
         "revenue": 15500,
@@ -2292,6 +2292,10 @@
       "Jivesh Harde": {
         "revenue": 11000,
         "count": 1
+      },
+      "Sneha Anand": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
@@ -2300,14 +2304,14 @@
         "count": 3
       },
       "Annual Max": {
-        "revenue": 202776,
-        "count": 18
+        "revenue": 213776,
+        "count": 19
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 168432,
-        "count": 16
+        "revenue": 179432,
+        "count": 17
       },
       "Renewals": {
         "revenue": 47844,
