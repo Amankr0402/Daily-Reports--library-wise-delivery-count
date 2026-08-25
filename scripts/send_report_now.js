@@ -6,15 +6,21 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 
+const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
+const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
+const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT, 10) || 587,
-  secure: false,
-  requireTLS: true,
+  service: 'gmail',
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: SMTP_USER,
+    pass: SMTP_PASS,
   },
+  tls: {
+    rejectUnauthorized: false,
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
 });
 
 function fmtINR(num) {

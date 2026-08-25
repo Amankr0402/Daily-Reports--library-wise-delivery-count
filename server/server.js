@@ -37,15 +37,10 @@ app.use('/data', express.static(path.join(__dirname, '..', 'data')));
 /* ---------- Nodemailer Transporter ---------- */
 const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
 const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
-const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
-const SMTP_PORT = parseInt(process.env.SMTP_PORT, 10) || 587;
 const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
 
 const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: false,
-  requireTLS: true,
+  service: 'gmail',
   auth: {
     user: SMTP_USER,
     pass: SMTP_PASS,
@@ -53,6 +48,8 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
   },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
 });
 
 /* ---------- Helpers ---------- */
