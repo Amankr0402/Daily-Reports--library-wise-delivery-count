@@ -1028,7 +1028,7 @@ function buildEmailHTML() {
 
     <!-- Footer -->
     <div style="background:#f8fafc;padding:20px 32px;text-align:center;font-size:12px;color:#94a3b8;border-top:1px solid #e2e8f0;line-height:1.5;">
-      Automated Daily Sales Intelligence Report • Generated at 10:00 AM IST<br />
+      Automated Daily Sales Intelligence Report • Generated at 4:30 PM IST<br />
       Daily Sales &amp; Revenue Analytics Dashboard System
     </div>
   </div>`;
