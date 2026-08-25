@@ -564,37 +564,52 @@ app.get('/api/sync-sheets', async (req, res) => {
 });
 
 /* ---------- Cron Job: Auto-send daily at 4:55 PM IST ---------- */
-const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '55 16 * * *';
-
-cron.schedule(CRON_SCHEDULE, async () => {
-  console.log(`⏰ Cron triggered at ${new Date().toISOString()} — sending daily sales report...`);
-
-  try {
-    const allData = getAllReportData();
-    const today = allData[allData.length - 1];
-    const d = new Date(today.date + 'T00:00:00');
-    const dateStr = d.toLocaleDateString('en-IN', {
-      month: 'short', day: 'numeric', year: 'numeric',
-    });
-
-    const html = buildEmailHTMLServer(allData);
-    const recipients = getRecipients();
-    const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
-
-    const info = await transporter.sendMail({
-      from: SMTP_FROM,
-      to: toList,
-      subject: `📈 Daily Sales Report — ${dateStr} [${fmtINR(today.totalRevenue)}]`,
-      html,
-    });
-
-    console.log(`✅ Automated 4:55 PM Sales Report sent — Message ID: ${info.messageId}`);
-  } catch (err) {
-    console.error('❌ Cron email error:', err);
+function parseCronExpression(raw) {
+  if (!raw || typeof raw !== 'string') return '55 16 * * *';
+  const clean = raw.replace(/^["']|["']$/g, '').trim();
+  const parts = clean.split(/\s+/);
+  if (parts.length === 5 || parts.length === 6) {
+    return clean;
   }
-}, { timezone: 'Asia/Kolkata' });
+  console.warn(`⚠️ Invalid CRON_SCHEDULE ("${raw}"). Falling back to default "55 16 * * *".`);
+  return '55 16 * * *';
+}
 
-console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (4:55 PM IST daily)`);
+const CRON_SCHEDULE = parseCronExpression(process.env.CRON_SCHEDULE);
+
+try {
+  cron.schedule(CRON_SCHEDULE, async () => {
+    console.log(`⏰ Cron triggered at ${new Date().toISOString()} — sending daily sales report...`);
+
+    try {
+      const allData = getAllReportData();
+      const today = allData[allData.length - 1];
+      const d = new Date(today.date + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('en-IN', {
+        month: 'short', day: 'numeric', year: 'numeric',
+      });
+
+      const html = buildEmailHTMLServer(allData);
+      const recipients = getRecipients();
+      const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
+
+      const info = await transporter.sendMail({
+        from: SMTP_FROM,
+        to: toList,
+        subject: `📈 Daily Sales Report — ${dateStr} [${fmtINR(today.totalRevenue)}]`,
+        html,
+      });
+
+      console.log(`✅ Automated 4:55 PM Sales Report sent — Message ID: ${info.messageId}`);
+    } catch (err) {
+      console.error('❌ Cron email error:', err);
+    }
+  }, { timezone: 'Asia/Kolkata' });
+
+  console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (4:55 PM IST daily)`);
+} catch (cronErr) {
+  console.error('⚠️ Could not schedule cron job:', cronErr.message);
+}
 
 /* ---------- Start Server ---------- */
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
