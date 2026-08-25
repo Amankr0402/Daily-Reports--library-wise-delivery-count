@@ -523,6 +523,10 @@ cron.schedule(CRON_SCHEDULE, async () => {
 console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (10:00 AM IST daily)`);
 
 /* ---------- Start Server ---------- */
-app.listen(PORT, () => {
-  console.log(`\n🚀 Daily Sales Report Server running at http://localhost:${PORT}\n`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Daily Sales Report Server running at http://localhost:${PORT}\n`);
+  });
+}
+
+module.exports = app;
