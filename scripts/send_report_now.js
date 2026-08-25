@@ -180,14 +180,9 @@ async function sendDailyReport() {
   const html = `
   <div style="font-family:'Inter',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
     <div style="background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%);padding:30px 32px;color:#ffffff;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <h1 style="margin:0;font-size:22px;font-weight:800;letter-spacing:-0.02em;">📈 Daily Sales &amp; Revenue Report</h1>
-          <p style="margin:6px 0 0;color:rgba(255,255,255,0.9);font-size:14px;font-weight:500;">${dateStr}</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.18);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.3);">
-          Executive Brief
-        </div>
+      <div>
+        <h1 style="margin:0;font-size:22px;font-weight:800;letter-spacing:-0.02em;">📈 Daily Sales &amp; Revenue Report</h1>
+        <p style="margin:6px 0 0;color:rgba(255,255,255,0.9);font-size:14px;font-weight:500;">${dateStr}</p>
       </div>
     </div>
 
