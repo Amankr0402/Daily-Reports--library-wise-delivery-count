@@ -1,0 +1,374 @@
+/**
+ * Trigger immediate Daily Sales Report Email delivery
+ */
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT, 10) || 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+function fmtINR(num) {
+  return '₹' + Math.round(num || 0).toLocaleString('en-IN');
+}
+
+function formatShortDate(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+}
+
+function quickChartURL(config, width = 560, height = 280) {
+  const json = JSON.stringify(config);
+  return `https://quickchart.io/chart?c=${encodeURIComponent(json)}&w=${width}&h=${height}&bkg=white&f=png`;
+}
+
+async function sendDailyReport() {
+  const dataPath = path.join(__dirname, '..', 'data', 'data.json');
+  const allData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  allData.sort((a, b) => a.date.localeCompare(b.date));
+
+  const today = allData[allData.length - 1];
+  const yesterday = allData.length > 1 ? allData[allData.length - 2] : today;
+
+  const d = new Date(today.date + 'T00:00:00');
+  const dateStr = d.toLocaleDateString('en-IN', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  const todayRev     = today.totalRevenue || 0;
+  const yesterdayRev = yesterday.totalRevenue || 0;
+  const diffRev      = todayRev - yesterdayRev;
+  const diffRevStr   = (diffRev >= 0 ? '+' : '') + fmtINR(diffRev);
+  const diffColor    = diffRev >= 0 ? '#059669' : '#e11d48';
+
+  const todayCount     = today.salesCount || 0;
+  const yesterdayCount = yesterday.salesCount || 0;
+  const diffCount      = todayCount - yesterdayCount;
+  const diffCountStr   = (diffCount >= 0 ? '+' : '') + diffCount;
+  const diffCountColor = diffCount >= 0 ? '#059669' : '#e11d48';
+
+  const todayAOV     = todayCount > 0 ? Math.round(todayRev / todayCount) : 0;
+  const yesterdayAOV = yesterdayCount > 0 ? Math.round(yesterdayRev / yesterdayCount) : 0;
+  const diffAOV      = todayAOV - yesterdayAOV;
+  const diffAOVStr   = (diffAOV >= 0 ? '+' : '') + fmtINR(diffAOV);
+  const diffAOVColor = diffAOV >= 0 ? '#059669' : '#e11d48';
+
+  const organicCount = today.sources?.Organic?.count || 0;
+  const organicRev   = today.sources?.Organic?.revenue || 0;
+
+  const renewalCount = (today.sources?.Renewals?.count || 0) + (today.sources?.Upgrade?.count || 0);
+  const renewalRev   = (today.sources?.Renewals?.revenue || 0) + (today.sources?.Upgrade?.revenue || 0);
+
+  const sortedAgents = Object.entries(today.agents || {}).sort((a, b) => b[1].revenue - a[1].revenue);
+  const topAgent = sortedAgents.length > 0 ? sortedAgents[0] : ['—', { revenue: 0, count: 0 }];
+  const topAgentInitials = topAgent[0].split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  const topAgentPct = todayRev > 0 ? ((topAgent[1].revenue / todayRev) * 100).toFixed(1) : 0;
+
+  const trendChartImg = quickChartURL({
+    type: 'line',
+    data: {
+      labels: allData.map(entry => formatShortDate(entry.date)),
+      datasets: [{
+        label: 'Daily Revenue (INR)',
+        data: allData.map(entry => entry.totalRevenue),
+        borderColor: '#6366f1',
+        backgroundColor: 'rgba(99,102,241,0.15)',
+        fill: true,
+        tension: 0.35,
+        pointRadius: 3,
+      }],
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { color: '#f1f5f9' } },
+        y: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { color: '#f1f5f9' } },
+      },
+    },
+  }, 560, 240);
+
+  const plans = today.plans || {};
+  const planLabels = Object.keys(plans);
+  const planCounts = planLabels.map(p => plans[p].count);
+  const planColors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#fb7185', '#8b5cf6'];
+  const planChartImg = quickChartURL({
+    type: 'doughnut',
+    data: {
+      labels: planLabels,
+      datasets: [{
+        data: planCounts,
+        backgroundColor: planColors.slice(0, planLabels.length),
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      }],
+    },
+    options: {
+      cutoutPercentage: 60,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11, family: 'Inter, sans-serif' }, boxWidth: 12, padding: 12 },
+        },
+      },
+    },
+  }, 560, 250);
+
+  const sources = today.sources || {};
+  const sourceLabels = Object.keys(sources);
+  const sourceRevs = sourceLabels.map(s => sources[s].revenue);
+  const sourceColors = ['#10b981', '#6366f1', '#06b6d4', '#f59e0b'];
+  const channelChartImg = quickChartURL({
+    type: 'bar',
+    data: {
+      labels: sourceLabels,
+      datasets: [{
+        label: 'Revenue (INR)',
+        data: sourceRevs,
+        backgroundColor: sourceColors.slice(0, sourceLabels.length),
+        borderRadius: 6,
+      }],
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { display: false } },
+        y: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { color: '#f1f5f9' } },
+      },
+    },
+  }, 560, 240);
+
+  const html = `
+  <div style="font-family:'Inter',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
+    <div style="background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%);padding:30px 32px;color:#ffffff;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="margin:0;font-size:22px;font-weight:800;letter-spacing:-0.02em;">📈 Daily Sales &amp; Revenue Report</h1>
+          <p style="margin:6px 0 0;color:rgba(255,255,255,0.9);font-size:14px;font-weight:500;">${dateStr}</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.18);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.3);">
+          Executive Brief
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. KPI CARDS -->
+    <div style="padding:28px 32px 16px;">
+      <h2 style="margin:0 0 16px;font-size:16px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">📊 Key Performance Indicators (Today)</h2>
+      <table style="width:100%;border-collapse:separate;border-spacing:10px 10px;margin-left:-10px;margin-right:-10px;">
+        <tr>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #10b981;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">💰 TOTAL REVENUE TODAY</div>
+            <div style="font-size:22px;font-weight:900;color:#059669;line-height:1.2;">${fmtINR(todayRev)}</div>
+            <div style="font-size:12px;color:${diffColor};font-weight:700;margin-top:6px;">${diffRevStr} vs yesterday</div>
+          </td>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6366f1;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">🤝 DEALS CLOSED TODAY</div>
+            <div style="font-size:22px;font-weight:900;color:#1e293b;line-height:1.2;">${todayCount} <span style="font-size:14px;color:#64748b;font-weight:600;">deals</span></div>
+            <div style="font-size:12px;color:${diffCountColor};font-weight:700;margin-top:6px;">${diffCountStr} deals vs yesterday</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #06b6d4;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">📊 AVERAGE DEAL SIZE (AOV)</div>
+            <div style="font-size:20px;font-weight:800;color:#1e293b;line-height:1.2;">${fmtINR(todayAOV)}</div>
+            <div style="font-size:12px;color:${diffAOVColor};font-weight:700;margin-top:6px;">${diffAOVStr} vs yesterday</div>
+          </td>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f59e0b;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">🌱 ORGANIC DEALS</div>
+            <div style="font-size:20px;font-weight:800;color:#1e293b;line-height:1.2;">${organicCount} <span style="font-size:13px;color:#64748b;font-weight:600;">deals</span></div>
+            <div style="font-size:12px;color:#059669;font-weight:700;margin-top:6px;">${fmtINR(organicRev)} generated</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #8b5cf6;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">🔄 RENEWALS &amp; UPGRADES</div>
+            <div style="font-size:20px;font-weight:800;color:#1e293b;line-height:1.2;">${renewalCount} <span style="font-size:13px;color:#64748b;font-weight:600;">deals</span></div>
+            <div style="font-size:12px;color:#059669;font-weight:700;margin-top:6px;">${fmtINR(renewalRev)} generated</div>
+          </td>
+          <td style="width:50%;background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f43f5e;border-radius:8px;padding:14px 16px;vertical-align:top;">
+            <div style="font-size:12px;color:#64748b;font-weight:600;margin-bottom:4px;">👑 TOP SALES AGENT</div>
+            <div style="font-size:20px;font-weight:800;color:#1e293b;line-height:1.2;">${topAgent[0].split(' ')[0]}</div>
+            <div style="font-size:12px;color:#059669;font-weight:700;margin-top:6px;">${fmtINR(topAgent[1].revenue)} (${topAgent[1].count} deals)</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 2. REVENUE TREND -->
+    <div style="padding:16px 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📈 Daily Revenue Trend (Month to Date)</h2>
+        <span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:3px 8px;border-radius:12px;font-weight:700;">August 2026</span>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;text-align:center;">
+        <img src="${trendChartImg}" alt="Daily Revenue Trend" style="width:100%;max-width:580px;height:auto;display:block;margin:0 auto;border-radius:6px;" />
+      </div>
+    </div>
+
+    <!-- 3. PLAN MIX -->
+    <div style="padding:0 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">🥧 Plan Mix &amp; Volume Breakdown</h2>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;">
+        <img src="${planChartImg}" alt="Plan Mix Distribution" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto;border-radius:6px;" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Plan Name</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Deals Count</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Revenue</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Share</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${planLabels.map((p) => {
+            const pData = plans[p] || { count: 0, revenue: 0 };
+            const pShare = todayRev > 0 ? ((pData.revenue / todayRev) * 100).toFixed(1) : 0;
+            return `
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${p}</td>
+                <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${pData.count}</td>
+                <td style="padding:9px 12px;text-align:right;font-weight:700;color:#059669;">${fmtINR(pData.revenue)}</td>
+                <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">${pShare}%</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. ACQUISITION CHANNELS -->
+    <div style="padding:0 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📊 Sales by Acquisition Channel</h2>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;">
+        <img src="${channelChartImg}" alt="Acquisition Channels" style="width:100%;max-width:580px;height:auto;display:block;margin:0 auto;border-radius:6px;" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Channel Source</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Deals Count</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sourceLabels.map((s) => {
+            const sData = sources[s] || { count: 0, revenue: 0 };
+            return `
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${s}</td>
+                <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${sData.count}</td>
+                <td style="padding:9px 12px;text-align:right;font-weight:700;color:#059669;">${fmtINR(sData.revenue)}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. TOP PERFORMERS -->
+    <div style="padding:0 32px 28px;">
+      <h2 style="margin:0 0 14px;font-size:16px;color:#0f172a;font-weight:800;">🏆 Top Performing Sales Agents Today</h2>
+      
+      ${sortedAgents.length > 0 ? `
+      <div style="background:linear-gradient(135deg,#fef9c3 0%,#fef08a 50%,#fde047 100%);border:2px solid #f59e0b;border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 4px 14px rgba(245,158,11,0.18);">
+        <table style="width:100%;border-collapse:collapse;">
+          <tr>
+            <td style="vertical-align:middle;">
+              <div style="display:inline-block;background:#b45309;color:#ffffff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">
+                👑 TOP PERFORMER OF THE DAY
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+                <div style="width:44px;height:44px;background:#d97706;border-radius:50%;color:#ffffff;font-weight:800;font-size:16px;text-align:center;line-height:44px;border:2px solid #ffffff;box-shadow:0 2px 8px rgba(0,0,0,0.15);position:relative;">
+                  ${topAgentInitials}
+                  <span style="position:absolute;bottom:-2px;right:-2px;background:#0f172a;border-radius:50%;font-size:11px;line-height:16px;width:16px;height:16px;display:block;border:1px solid #fbbf24;">🏆</span>
+                </div>
+                <div>
+                  <h3 style="margin:0;font-size:19px;font-weight:900;color:#78350f;letter-spacing:-0.01em;">${topAgent[0]}</h3>
+                  <div style="font-size:12px;color:#92400e;font-weight:600;margin-top:2px;">
+                    🎯 ${topAgent[1].count} deal${topAgent[1].count > 1 ? 's' : ''} closed • 📈 ${topAgentPct}% of today's revenue
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td style="text-align:right;vertical-align:middle;padding-left:16px;">
+              <div style="font-size:11px;color:#92400e;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Total Revenue</div>
+              <div style="font-size:24px;font-weight:900;color:#065f46;line-height:1.2;">${fmtINR(topAgent[1].revenue)}</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      ` : ''}
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;border-bottom:2px solid #e2e8f0;text-align:left;color:#475569;">
+            <th style="padding:9px 12px;font-weight:700;width:80px;">Rank</th>
+            <th style="padding:9px 12px;font-weight:700;">Agent Name</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Deals</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Revenue Closed</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sortedAgents.map(([agent, val], idx) => {
+            const rank = idx + 1;
+            const badgeBg = rank === 1 ? '#fef3c7' : rank === 2 ? '#e2e8f0' : rank === 3 ? '#ffedd5' : '#f1f5f9';
+            const badgeColor = rank === 1 ? '#b45309' : rank === 2 ? '#475569' : rank === 3 ? '#c2410c' : '#64748b';
+            return `
+              <tr style="border-bottom:1px solid #f1f5f9;${rank === 1 ? 'background:#fffbeb;' : ''}">
+                <td style="padding:9px 12px;">
+                  <span style="display:inline-block;background:${badgeBg};color:${badgeColor};font-weight:800;font-size:11px;padding:2px 8px;border-radius:10px;">
+                    ${rank === 1 ? '🏆 #1' : '#' + rank}
+                  </span>
+                </td>
+                <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${agent}</td>
+                <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${val.count}</td>
+                <td style="padding:9px 12px;text-align:right;font-weight:700;color:#059669;">${fmtINR(val.revenue)}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="background:#f8fafc;padding:20px 32px;text-align:center;font-size:12px;color:#94a3b8;border-top:1px solid #e2e8f0;line-height:1.5;">
+      Automated Daily Sales Intelligence Report • Generated at 10:00 AM IST<br />
+      Daily Sales &amp; Revenue Analytics Dashboard System
+    </div>
+  </div>`;
+
+  const rawRecipients = fs.readFileSync(path.join(__dirname, '..', 'config', 'employees.json'), 'utf-8');
+  const { recipients } = JSON.parse(rawRecipients);
+  const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
+
+  console.log(`📤 Sending report email from ${process.env.SMTP_USER} to: ${toList}`);
+
+  const info = await transporter.sendMail({
+    from: `"${process.env.SMTP_FROM || 'Aman Soni'}" <${process.env.SMTP_USER}>`,
+    to: toList,
+    subject: `📈 Daily Sales & Revenue Report — ${dateStr} [${fmtINR(todayRev)}]`,
+    html,
+  });
+
+  console.log(`✅ Email Successfully Sent! Message ID: ${info.messageId}`);
+  return info;
+}
+
+sendDailyReport().then(() => process.exit(0)).catch(err => {
+  console.error('❌ Failed to send email:', err);
+  process.exit(1);
+});
