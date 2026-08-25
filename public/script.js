@@ -33,9 +33,18 @@ let yesterdayData = {};
 /* ============================================================
    DATA LOADING
    ============================================================ */
-async function fetchData() {
+async function fetchData(syncLive = false) {
   try {
-    const resp = await fetch(CONFIG.DATA_URL);
+    if (syncLive) {
+      showToast('Syncing live data from Google Sheets…', 'info');
+      try {
+        await fetch(`${CONFIG.API_BASE}/api/sync-sheets`, { method: 'POST' });
+      } catch (syncErr) {
+        console.warn('Backend sync-sheets API not available, loading static data:', syncErr);
+      }
+    }
+
+    const resp = await fetch(`${CONFIG.DATA_URL}?t=${Date.now()}`);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     allData = await resp.json();
 
@@ -45,6 +54,9 @@ async function fetchData() {
     yesterdayData = allData.length > 1 ? allData[allData.length - 2] : todayData;
 
     render();
+    if (syncLive) {
+      showToast('Dashboard updated with latest Google Sheets data!', 'success');
+    }
   } catch (err) {
     console.error('Failed to load data:', err);
     showToast('Failed to load report data. Check console.', 'error');
@@ -838,7 +850,7 @@ function showToast(message, type = 'info') {
   setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 4500);
 }
 
-$btnRefresh.addEventListener('click', fetchData);
+$btnRefresh.addEventListener('click', () => fetchData(true));
 $btnSend.addEventListener('click', openModal);
 $modalClose.addEventListener('click', closeModal);
 $modalCancel.addEventListener('click', closeModal);

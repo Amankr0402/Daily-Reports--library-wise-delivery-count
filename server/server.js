@@ -461,6 +461,29 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+/* ---------- Live Google Sheets Sync Route ---------- */
+app.post('/api/sync-sheets', async (req, res) => {
+  try {
+    const { syncSalesData } = require('../scripts/sync_sheets');
+    const data = await syncSalesData();
+    res.json({ success: true, count: data.length, latestDate: data[data.length - 1]?.date });
+  } catch (err) {
+    console.error('❌ Sheets sync error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/sync-sheets', async (req, res) => {
+  try {
+    const { syncSalesData } = require('../scripts/sync_sheets');
+    const data = await syncSalesData();
+    res.json({ success: true, count: data.length, latestDate: data[data.length - 1]?.date });
+  } catch (err) {
+    console.error('❌ Sheets sync error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 /* ---------- Cron Job: Auto-send daily at 10:00 AM IST ---------- */
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '0 10 * * *';
 
