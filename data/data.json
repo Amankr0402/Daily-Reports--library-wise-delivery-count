@@ -2241,9 +2241,9 @@
   },
   {
     "date": "2026-08-25",
-    "totalRevenue": 120560,
-    "salesCount": 12,
-    "transactions": 12,
+    "totalRevenue": 153560,
+    "salesCount": 15,
+    "transactions": 15,
     "agents": {
       "Shashank Tiwari": {
         "revenue": 15500,
@@ -2276,6 +2276,18 @@
       "Abhijeet Mathur": {
         "revenue": 12000,
         "count": 1
+      },
+      "Chhaya Patel": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Yuvraj Singh Dodiya": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Honey Talreja": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
@@ -2284,14 +2296,14 @@
         "count": 2
       },
       "Annual Max": {
-        "revenue": 111560,
-        "count": 10
+        "revenue": 144560,
+        "count": 13
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 72716,
-        "count": 7
+        "revenue": 105716,
+        "count": 10
       },
       "Renewals": {
         "revenue": 47844,
