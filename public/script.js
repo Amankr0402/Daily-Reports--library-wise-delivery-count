@@ -370,27 +370,10 @@ function renderPlanChart() {
         legend: {
           position: 'bottom',
           labels: {
-            color: '#cbd5e1',
-            font: { family: 'Inter', size: 11, weight: '600' },
-            padding: 12,
+            color: '#94a3b8',
+            font: { family: 'Inter', size: 11, weight: '500' },
+            padding: 14,
             usePointStyle: true,
-            generateLabels: (chart) => {
-              const datasets = chart.data.datasets;
-              return chart.data.labels.map((label, i) => {
-                const count = datasets[0].data[i];
-                const rev = plans[label]?.revenue || 0;
-                const pct = totalPlanCount > 0 ? Math.round((count / totalPlanCount) * 100) : 0;
-                return {
-                  text: `${label}: ${count} deals (${fmtINR(rev)} • ${pct}%)`,
-                  fillStyle: datasets[0].backgroundColor[i],
-                  strokeStyle: datasets[0].backgroundColor[i],
-                  lineWidth: 0,
-                  pointStyle: 'circle',
-                  hidden: isNaN(datasets[0].data[i]) || chart.getDatasetMeta(0).data[i].hidden,
-                  index: i
-                };
-              });
-            }
           }
         },
         tooltip: {
