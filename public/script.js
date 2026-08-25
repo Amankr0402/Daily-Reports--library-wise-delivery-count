@@ -23,8 +23,9 @@ const $modalPreview     = document.getElementById('modal-preview');
 const $modalClose       = document.getElementById('modal-close');
 const $modalCancel      = document.getElementById('modal-cancel');
 const $modalConfirm     = document.getElementById('modal-confirm');
-const $toastContainer   = document.getElementById('toast-container');
-const $agentLeaderboard = document.getElementById('agent-leaderboard');
+const $toastContainer    = document.getElementById('toast-container');
+const $agentLeaderboard   = document.getElementById('agent-leaderboard');
+const $userBreakdownGrid  = document.getElementById('user-breakdown-grid');
 
 /* ---------- State ---------- */
 let allData           = [];
@@ -38,7 +39,7 @@ let yesterdayData     = {};
 async function fetchData(syncLive = false) {
   try {
     if (syncLive) {
-      showToast('Syncing live data from Google Sheets…', 'info');
+      showToast('Syncing live data from Google Sheets & Metabase…', 'info');
       try {
         await fetch(`${CONFIG.API_BASE}/api/sync-sheets`, { method: 'POST' });
       } catch (syncErr) {
@@ -66,7 +67,7 @@ async function fetchData(syncLive = false) {
     renderDateSelector();
 
     if (syncLive) {
-      showToast('Dashboard updated with latest Google Sheets data!', 'success');
+      showToast('Dashboard updated with latest Google Sheets & Metabase data!', 'success');
     }
   } catch (err) {
     console.error('Failed to load data:', err);
@@ -101,8 +102,43 @@ function renderDateSelector() {
 function render() {
   renderHeader();
   renderKPIs();
+  renderUserBreakdown();
   renderCharts();
   renderLeaderboard();
+}
+
+/* ---------- D-o-D User Breakdown ---------- */
+function renderUserBreakdown() {
+  if (!$userBreakdownGrid) return;
+  const ub = todayData.userBreakdown;
+
+  if (!ub) {
+    $userBreakdownGrid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 16px; font-size: 0.82rem; font-weight: 500;">
+        No conversion funnel metrics recorded for this date.
+      </div>
+    `;
+    return;
+  }
+
+  const items = [
+    { label: 'Signups', val: ub.signups.toLocaleString('en-IN'), sub: 'Total Signups', icon: '📝', color: '#818cf8' },
+    { label: 'Serviceable', val: ub.serviceable.toLocaleString('en-IN'), sub: `${ub.serviceablePct} of signups`, icon: '📍', color: '#22d3ee' },
+    { label: 'Toy Viewed', val: ub.toyViewed, sub: '% of Serviceable', icon: '🧸', color: '#34d399' },
+    { label: 'Plan Page', val: ub.planPage, sub: '% of Serviceable', icon: '📋', color: '#60a5fa' },
+    { label: 'Checkout Drop', val: ub.checkoutDrop, sub: '% of Serviceable', icon: '🛒', color: '#fbbf24' },
+    { label: 'Payment Dropout', val: ub.paymentDropout, sub: '% of Serviceable', icon: '💳', color: '#fb7185' },
+    { label: 'Won', val: ub.won, sub: '% of Serviceable', icon: '🏆', color: '#10b981' }
+  ];
+
+  $userBreakdownGrid.innerHTML = items.map(item => `
+    <div class="user-breakdown-item">
+      <div class="user-breakdown-item__icon">${item.icon}</div>
+      <div class="user-breakdown-item__label">${item.label}</div>
+      <div class="user-breakdown-item__val" style="color:${item.color}">${item.val}</div>
+      <div class="user-breakdown-item__sub">${item.sub}</div>
+    </div>
+  `).join('');
 }
 
 /* ---------- Header Date ---------- */
@@ -781,7 +817,63 @@ function buildEmailHTML() {
       </table>
     </div>
 
-    <!-- ================= 2. DAILY REVENUE TREND CHART ================= -->
+    <!-- ================= 2. D-o-D USER BREAKDOWN ================= -->
+    ${todayData.userBreakdown ? `
+    <div style="padding:0 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">👥 D-o-D User Breakdown</h2>
+        <span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:12px;font-weight:700;">Conversion Funnel</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Funnel Metric</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Count / %</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📝 Signups</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#4338ca;">${todayData.userBreakdown.signups.toLocaleString('en-IN')}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">Total Registrations</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📍 Serviceable</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#0284c7;">${todayData.userBreakdown.serviceable.toLocaleString('en-IN')} <span style="font-size:11px;color:#0284c7;font-weight:600;">(${todayData.userBreakdown.serviceablePct})</span></td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Signups</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🧸 Toy Viewed</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#059669;">${todayData.userBreakdown.toyViewed}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📋 Plan Page</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#2563eb;">${todayData.userBreakdown.planPage}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🛒 Checkout Drop</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#d97706;">${todayData.userBreakdown.checkoutDrop}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">💳 Payment Dropout</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#e11d48;">${todayData.userBreakdown.paymentDropout}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🏆 Won</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:900;color:#059669;background:#f0fdf4;">${todayData.userBreakdown.won}</td>
+            <td style="padding:9px 12px;text-align:right;color:#059669;font-weight:700;background:#f0fdf4;">% of Serviceable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    ` : ''}
+
+    <!-- ================= 3. DAILY REVENUE TREND CHART ================= -->
     <div style="padding:16px 32px 24px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
         <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📈 Daily Revenue Trend (Month to Date)</h2>

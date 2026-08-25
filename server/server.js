@@ -289,7 +289,63 @@ function buildEmailHTMLServer(allData) {
       </table>
     </div>
 
-    <!-- ================= 2. DAILY REVENUE TREND CHART ================= -->
+    <!-- ================= 2. D-o-D USER BREAKDOWN ================= -->
+    ${today.userBreakdown ? `
+    <div style="padding:0 32px 24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;letter-spacing:-0.01em;">👥 D-o-D User Breakdown</h2>
+        <span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:12px;font-weight:700;">Conversion Funnel</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Funnel Metric</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Count / %</th>
+            <th style="padding:9px 12px;text-align:right;font-weight:700;">Stage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📝 Signups</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#4338ca;">${today.userBreakdown.signups.toLocaleString('en-IN')}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">Total Registrations</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📍 Serviceable</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#0284c7;">${today.userBreakdown.serviceable.toLocaleString('en-IN')} <span style="font-size:11px;color:#0284c7;font-weight:600;">(${today.userBreakdown.serviceablePct})</span></td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Signups</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🧸 Toy Viewed</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#059669;">${today.userBreakdown.toyViewed}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">📋 Plan Page</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#2563eb;">${today.userBreakdown.planPage}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🛒 Checkout Drop</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#d97706;">${today.userBreakdown.checkoutDrop}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">💳 Payment Dropout</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:800;color:#e11d48;">${today.userBreakdown.paymentDropout}</td>
+            <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">% of Serviceable</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 12px;font-weight:700;color:#1e293b;">🏆 Won</td>
+            <td style="padding:9px 12px;text-align:center;font-weight:900;color:#059669;background:#f0fdf4;">${today.userBreakdown.won}</td>
+            <td style="padding:9px 12px;text-align:right;color:#059669;font-weight:700;background:#f0fdf4;">% of Serviceable</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    ` : ''}
+
+    <!-- ================= 3. DAILY REVENUE TREND CHART ================= -->
     <div style="padding:16px 32px 24px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
         <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📈 Daily Revenue Trend (Month to Date)</h2>

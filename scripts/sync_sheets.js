@@ -12,18 +12,14 @@ const path  = require('path');
 
 const SPREADSHEET_ID = '1AMJ0DLL2JV9gl58h5yRPgTZyBzwSOL1cyrhpyA5Qz9c';
 const SHEET_NAME     = 'Sales/Rev (Auto)';
+const METABASE_URL   = 'https://metabase-bkp.theelefant.ai/public/question/ad536236-1e69-41de-91de-12af99a32593.csv';
 const OUTPUT_FILE    = path.join(__dirname, '..', 'data', 'data.json');
 
-function fetchSheetCSV(spreadsheetId, sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+function fetchURLWithRedirect(url) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        https.get(res.headers.location, (redirectRes) => {
-          let data = '';
-          redirectRes.on('data', chunk => data += chunk);
-          redirectRes.on('end', () => resolve(data));
-        }).on('error', reject);
+        fetchURLWithRedirect(res.headers.location).then(resolve).catch(reject);
         return;
       }
       let data = '';
@@ -31,6 +27,15 @@ function fetchSheetCSV(spreadsheetId, sheetName) {
       res.on('end', () => resolve(data));
     }).on('error', reject);
   });
+}
+
+function fetchSheetCSV(spreadsheetId, sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+  return fetchURLWithRedirect(url);
+}
+
+function fetchMetabaseCSV() {
+  return fetchURLWithRedirect(METABASE_URL);
 }
 
 function parseCSVLine(text) {
@@ -90,19 +95,19 @@ function parseDate(rawDate) {
 
 async function syncSalesData() {
   console.log(`📡 Fetching sales data from Google Sheet: "${SHEET_NAME}"...`);
-  const csv = await fetchSheetCSV(SPREADSHEET_ID, SHEET_NAME);
-  const lines = csv.split('\n').map(l => l.trim()).filter(Boolean);
+  const sheetCSV = await fetchSheetCSV(SPREADSHEET_ID, SHEET_NAME);
+  const sheetLines = sheetCSV.split('\n').map(l => l.trim()).filter(Boolean);
 
-  if (lines.length <= 1) {
+  if (sheetLines.length <= 1) {
     throw new Error('No records returned from sheet.');
   }
 
-  console.log(`📊 Processing ${lines.length} rows...`);
+  console.log(`📊 Processing ${sheetLines.length} Google Sheet rows...`);
   const recordsByDate = {};
 
   // Skip header (row 0) and summary total row (row 1)
-  for (let i = 2; i < lines.length; i++) {
-    const cols = parseCSVLine(lines[i]).map(c => c.replace(/^"|"$/g, '').trim());
+  for (let i = 2; i < sheetLines.length; i++) {
+    const cols = parseCSVLine(sheetLines[i]).map(c => c.replace(/^"|"$/g, '').trim());
     const rawDate = cols[1];
     const agent   = cols[3];
     const rawRev  = cols[4];
@@ -125,7 +130,8 @@ async function syncSalesData() {
         transactions: 0,
         agents: {},
         plans: {},
-        sources: {}
+        sources: {},
+        userBreakdown: null
       };
     }
 
@@ -152,10 +158,52 @@ async function syncSalesData() {
     day.sources[cleanSource].count += count;
   }
 
+  // Fetch Metabase User Breakdown CSV
+  try {
+    console.log(`🌐 Fetching D-o-D User Breakdown from Metabase...`);
+    const metabaseCSV = await fetchMetabaseCSV();
+    const metaLines = metabaseCSV.split('\n').map(l => l.trim()).filter(Boolean);
+    console.log(`📈 Processing ${metaLines.length} Metabase User Breakdown rows...`);
+
+    // Row 0 is header: Day,Signups,Serviceable,Toy Viewed,Plan Page,Checkout Drop,Payment Dropout,Won
+    for (let i = 1; i < metaLines.length; i++) {
+      const cols = parseCSVLine(metaLines[i]).map(c => c.replace(/^"|"$/g, '').trim());
+      const rawDay = cols[0];
+      if (!rawDay) continue;
+
+      const signups = parseInt(cols[1], 10) || 0;
+      const serviceable = parseInt(cols[2], 10) || 0;
+      const serviceablePct = signups > 0 ? ((serviceable / signups) * 100).toFixed(1) + '%' : '0%';
+      const toyViewed = cols[3] || '0 (0%)';
+      const planPage = cols[4] || '0 (0%)';
+      const checkoutDrop = cols[5] || '0 (0%)';
+      const paymentDropout = cols[6] || '0 (0%)';
+      const won = cols[7] || '0 (0%)';
+
+      const userBreakdown = {
+        signups,
+        serviceable,
+        serviceableWithPct: `${serviceable.toLocaleString('en-IN')} (${serviceablePct})`,
+        serviceablePct,
+        toyViewed,
+        planPage,
+        checkoutDrop,
+        paymentDropout,
+        won
+      };
+
+      if (recordsByDate[rawDay]) {
+        recordsByDate[rawDay].userBreakdown = userBreakdown;
+      }
+    }
+  } catch (metaErr) {
+    console.warn(`⚠️ Warning: Could not fetch Metabase User Breakdown:`, metaErr.message);
+  }
+
   const sortedDays = Object.values(recordsByDate).sort((a, b) => a.date.localeCompare(b.date));
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(sortedDays, null, 2), 'utf-8');
-  console.log(`✅ Successfully synced ${sortedDays.length} days of data to ${OUTPUT_FILE}`);
+  console.log(`✅ Successfully synced ${sortedDays.length} days of data with D-o-D User Breakdown to ${OUTPUT_FILE}`);
 
   return sortedDays;
 }
@@ -167,4 +215,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { syncSalesData, fetchSheetCSV };
+module.exports = { syncSalesData, fetchSheetCSV, fetchMetabaseCSV };
