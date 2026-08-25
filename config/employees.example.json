@@ -1,0 +1,12 @@
+{
+  "recipients": [
+    {
+      "name": "Team Lead",
+      "email": "sales-lead@example.com"
+    },
+    {
+      "name": "Sales Representative",
+      "email": "agent@example.com"
+    }
+  ]
+}
