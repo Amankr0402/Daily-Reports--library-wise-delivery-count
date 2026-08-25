@@ -506,7 +506,7 @@ function buildEmailHTMLServer(allData) {
 
     <!-- Footer -->
     <div style="background:#f8fafc;padding:20px 32px;text-align:center;font-size:12px;color:#94a3b8;border-top:1px solid #e2e8f0;line-height:1.5;">
-      Automated Daily Sales Intelligence Report • Generated at 4:45 PM IST<br />
+      Automated Daily Sales Intelligence Report • Generated at 4:55 PM IST<br />
       Daily Sales &amp; Revenue Analytics Dashboard System
     </div>
   </div>`;
@@ -566,8 +566,8 @@ app.get('/api/sync-sheets', async (req, res) => {
   }
 });
 
-/* ---------- Cron Job: Auto-send daily at 4:45 PM IST ---------- */
-const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '45 16 * * *';
+/* ---------- Cron Job: Auto-send daily at 4:55 PM IST ---------- */
+const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '55 16 * * *';
 
 cron.schedule(CRON_SCHEDULE, async () => {
   console.log(`⏰ Cron triggered at ${new Date().toISOString()} — sending daily sales report...`);
@@ -591,13 +591,13 @@ cron.schedule(CRON_SCHEDULE, async () => {
       html,
     });
 
-    console.log(`✅ Automated 4:45 PM Sales Report sent — Message ID: ${info.messageId}`);
+    console.log(`✅ Automated 4:55 PM Sales Report sent — Message ID: ${info.messageId}`);
   } catch (err) {
     console.error('❌ Cron email error:', err);
   }
 }, { timezone: 'Asia/Kolkata' });
 
-console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (4:45 PM IST daily)`);
+console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (4:55 PM IST daily)`);
 
 /* ---------- Start Server ---------- */
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
