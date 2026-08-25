@@ -1977,9 +1977,9 @@
   },
   {
     "date": "2026-08-25",
-    "totalRevenue": 86560,
-    "salesCount": 9,
-    "transactions": 9,
+    "totalRevenue": 108560,
+    "salesCount": 11,
+    "transactions": 11,
     "agents": {
       "Shashank Tiwari": {
         "revenue": 15500,
@@ -2000,6 +2000,14 @@
       "Amol Landge": {
         "revenue": 20752,
         "count": 2
+      },
+      "Naveen Suwalka": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Prerak Bhavsar": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
@@ -2008,14 +2016,14 @@
         "count": 2
       },
       "Annual Max": {
-        "revenue": 77560,
-        "count": 7
+        "revenue": 99560,
+        "count": 9
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 38716,
-        "count": 4
+        "revenue": 60716,
+        "count": 6
       },
       "Renewals": {
         "revenue": 47844,
