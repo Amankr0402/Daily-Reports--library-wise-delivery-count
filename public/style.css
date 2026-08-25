@@ -416,7 +416,7 @@ body::after {
 
 .chart-wrapper--donut,
 .chart-wrapper--bar {
-  height: 260px;
+  height: 290px;
 }
 
 .chart-card canvas {

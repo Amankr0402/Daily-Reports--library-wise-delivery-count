@@ -291,12 +291,63 @@ function renderRevenueChart() {
 
 /* 2. Plan Distribution Donut */
 function renderPlanChart() {
-  // Aggregate plans month to date or today
   const plans = todayData.plans || {};
   const labels = Object.keys(plans);
   const data = Object.values(plans).map(p => p.count);
+  const totalPlanCount = data.reduce((a, b) => a + b, 0);
+  const totalPlanRev = labels.reduce((sum, l) => sum + (plans[l]?.revenue || 0), 0);
 
   const colors = ['#818cf8', '#22d3ee', '#34d399', '#fbbf24', '#fb7185', '#a78bfa', '#f43f5e'];
+
+  // Center text plugin: displays total deals and revenue in center of donut
+  const donutCenterPlugin = {
+    id: 'donutCenterPlugin',
+    beforeDraw: (chart) => {
+      const { ctx, chartArea: { top, bottom, left, right } } = chart;
+      if (!top) return;
+      ctx.save();
+      const centerX = (left + right) / 2;
+      const centerY = (top + bottom) / 2;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Total count
+      ctx.font = '800 18px Inter, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(`${totalPlanCount} Deals`, centerX, centerY - 9);
+
+      // Total revenue
+      ctx.font = '700 12px Inter, sans-serif';
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(fmtINR(totalPlanRev), centerX, centerY + 11);
+      ctx.restore();
+    }
+  };
+
+  // Slice label plugin: shows count & percentage on slices directly
+  const donutSlicePlugin = {
+    id: 'donutSlicePlugin',
+    afterDatasetDraw: (chart, args) => {
+      const { ctx } = chart;
+      const meta = args.meta;
+      meta.data.forEach((element, index) => {
+        const count = chart.data.datasets[0].data[index];
+        const pct = totalPlanCount > 0 ? Math.round((count / totalPlanCount) * 100) : 0;
+        if (pct < 10) return; // Skip tiny slices to prevent text overlap
+
+        const pos = element.tooltipPosition();
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 4;
+        ctx.fillText(`${count} (${pct}%)`, pos.x, pos.y);
+        ctx.restore();
+      });
+    }
+  };
 
   chartPlan = new Chart(document.getElementById('chart-plan'), {
     type: 'doughnut',
@@ -305,16 +356,43 @@ function renderPlanChart() {
       datasets: [{
         data,
         backgroundColor: colors.slice(0, labels.length),
-        borderWidth: 0,
+        borderWidth: 2,
+        borderColor: '#0f172a',
         hoverOffset: 8,
       }],
     },
+    plugins: [donutCenterPlugin, donutSlicePlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '62%',
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 }, padding: 14, usePointStyle: true } },
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#cbd5e1',
+            font: { family: 'Inter', size: 11, weight: '600' },
+            padding: 12,
+            usePointStyle: true,
+            generateLabels: (chart) => {
+              const datasets = chart.data.datasets;
+              return chart.data.labels.map((label, i) => {
+                const count = datasets[0].data[i];
+                const rev = plans[label]?.revenue || 0;
+                const pct = totalPlanCount > 0 ? Math.round((count / totalPlanCount) * 100) : 0;
+                return {
+                  text: `${label}: ${count} deals (${fmtINR(rev)} • ${pct}%)`,
+                  fillStyle: datasets[0].backgroundColor[i],
+                  strokeStyle: datasets[0].backgroundColor[i],
+                  lineWidth: 0,
+                  pointStyle: 'circle',
+                  hidden: isNaN(datasets[0].data[i]) || chart.getDatasetMeta(0).data[i].hidden,
+                  index: i
+                };
+              });
+            }
+          }
+        },
         tooltip: {
           ...tooltipStyle(),
           callbacks: {
@@ -333,6 +411,37 @@ function renderChannelChart() {
   const data = labels.map(s => sources[s].revenue);
   const counts = labels.map(s => sources[s].count);
 
+  // Bar label plugin: permanently displays revenue and deal count above each bar
+  const barValueLabelsPlugin = {
+    id: 'barValueLabelsPlugin',
+    afterDatasetDraw: (chart) => {
+      const { ctx } = chart;
+      chart.data.datasets.forEach((dataset, i) => {
+        const meta = chart.getDatasetMeta(i);
+        meta.data.forEach((bar, index) => {
+          const rev = dataset.data[index];
+          const count = counts[index];
+          if (rev === undefined || rev === null) return;
+
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+
+          // Revenue label
+          ctx.font = '700 11px Inter, sans-serif';
+          ctx.fillStyle = '#34d399';
+          ctx.fillText(fmtINR(rev), bar.x, bar.y - 15);
+
+          // Deal count sub-label
+          ctx.font = '600 10px Inter, sans-serif';
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText(`${count} deal${count > 1 ? 's' : ''}`, bar.x, bar.y - 3);
+          ctx.restore();
+        });
+      });
+    }
+  };
+
   chartChannel = new Chart(document.getElementById('chart-channel'), {
     type: 'bar',
     data: {
@@ -346,9 +455,15 @@ function renderChannelChart() {
         maxBarThickness: 56,
       }],
     },
+    plugins: [barValueLabelsPlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 24,
+        }
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -359,9 +474,10 @@ function renderChannelChart() {
         },
       },
       scales: {
-        x: { ticks: { color: '#64748b', font: { family: 'Inter', size: 11 } }, grid: { display: false } },
+        x: { ticks: { color: '#cbd5e1', font: { family: 'Inter', size: 11, weight: '600' } }, grid: { display: false } },
         y: {
           beginAtZero: true,
+          grace: '20%',
           ticks: {
             color: '#64748b',
             font: { family: 'Inter', size: 11 },
