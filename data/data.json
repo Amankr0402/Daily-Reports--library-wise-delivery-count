@@ -1977,9 +1977,9 @@
   },
   {
     "date": "2026-08-25",
-    "totalRevenue": 108560,
-    "salesCount": 11,
-    "transactions": 11,
+    "totalRevenue": 120560,
+    "salesCount": 12,
+    "transactions": 12,
     "agents": {
       "Shashank Tiwari": {
         "revenue": 15500,
@@ -2008,6 +2008,10 @@
       "Prerak Bhavsar": {
         "revenue": 11000,
         "count": 1
+      },
+      "Abhijeet Mathur": {
+        "revenue": 12000,
+        "count": 1
       }
     },
     "plans": {
@@ -2016,14 +2020,14 @@
         "count": 2
       },
       "Annual Max": {
-        "revenue": 99560,
-        "count": 9
+        "revenue": 111560,
+        "count": 10
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 60716,
-        "count": 6
+        "revenue": 72716,
+        "count": 7
       },
       "Renewals": {
         "revenue": 47844,
