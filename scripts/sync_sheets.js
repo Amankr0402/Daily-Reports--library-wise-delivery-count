@@ -66,16 +66,23 @@ function parseDate(rawDate) {
       if (y.length === 2) y = '20' + y;
 
       let m, d;
-      if (p1 > 12) {
+      // Handle August mixed formatting in source sheet (8/D/YYYY vs DD/08/YYYY)
+      if (p1 === 8) {
+        m = 8;
+        d = p2;
+      } else if (p2 === 8) {
+        m = 8;
+        d = p1;
+      } else if (p1 > 12) {
         // DD/MM/YYYY
-        d = String(p1).padStart(2, '0');
-        m = String(p2).padStart(2, '0');
+        d = p1;
+        m = p2;
       } else {
-        // M/D/YYYY
-        m = String(p1).padStart(2, '0');
-        d = String(p2).padStart(2, '0');
+        // MM/DD/YYYY
+        m = p1;
+        d = p2;
       }
-      return `${y}-${m}-${d}`;
+      return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     }
   }
   return clean;

@@ -893,45 +893,69 @@
   },
   {
     "date": "2026-08-12",
-    "totalRevenue": 75592,
-    "salesCount": 7,
-    "transactions": 7,
+    "totalRevenue": 150316,
+    "salesCount": 16,
+    "transactions": 16,
     "agents": {
       "Tanveer Ahmed": {
-        "revenue": 27000,
-        "count": 2
+        "revenue": 32756,
+        "count": 3
       },
       "Amol Landge": {
-        "revenue": 14376,
-        "count": 2
+        "revenue": 35128,
+        "count": 4
       },
       "Shubham Rai": {
         "revenue": 23216,
         "count": 2
       },
       "Sneha Anand": {
+        "revenue": 16500,
+        "count": 2
+      },
+      "Shivani Gupta": {
+        "revenue": 12216,
+        "count": 1
+      },
+      "Honey Talreja": {
+        "revenue": 4000,
+        "count": 1
+      },
+      "Kush Shah": {
         "revenue": 11000,
+        "count": 1
+      },
+      "Jivesh Harde": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Naveen Suwalka": {
+        "revenue": 4500,
         "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 71592,
-        "count": 6
+        "revenue": 126560,
+        "count": 11
       },
       "Quarterly Max": {
-        "revenue": 4000,
+        "revenue": 18256,
+        "count": 4
+      },
+      "Annual Mini": {
+        "revenue": 5500,
         "count": 1
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 61216,
-        "count": 5
+        "revenue": 115188,
+        "count": 12
       },
       "Renewals": {
-        "revenue": 14376,
-        "count": 2
+        "revenue": 35128,
+        "count": 4
       }
     }
   },
@@ -1987,70 +2011,6 @@
       },
       "Renewals": {
         "revenue": 22592,
-        "count": 2
-      }
-    }
-  },
-  {
-    "date": "2026-12-08",
-    "totalRevenue": 74724,
-    "salesCount": 9,
-    "transactions": 9,
-    "agents": {
-      "Shivani Gupta": {
-        "revenue": 12216,
-        "count": 1
-      },
-      "Amol Landge": {
-        "revenue": 20752,
-        "count": 2
-      },
-      "Honey Talreja": {
-        "revenue": 4000,
-        "count": 1
-      },
-      "Sneha Anand": {
-        "revenue": 5500,
-        "count": 1
-      },
-      "Kush Shah": {
-        "revenue": 11000,
-        "count": 1
-      },
-      "Jivesh Harde": {
-        "revenue": 11000,
-        "count": 1
-      },
-      "Naveen Suwalka": {
-        "revenue": 4500,
-        "count": 1
-      },
-      "Tanveer Ahmed": {
-        "revenue": 5756,
-        "count": 1
-      }
-    },
-    "plans": {
-      "Annual Max": {
-        "revenue": 54968,
-        "count": 5
-      },
-      "Quarterly Max": {
-        "revenue": 14256,
-        "count": 3
-      },
-      "Annual Mini": {
-        "revenue": 5500,
-        "count": 1
-      }
-    },
-    "sources": {
-      "Organic": {
-        "revenue": 53972,
-        "count": 7
-      },
-      "Renewals": {
-        "revenue": 20752,
         "count": 2
       }
     }
