@@ -641,6 +641,8 @@ function buildEmailHTML() {
   const plans = todayData.plans || {};
   const planLabels = Object.keys(plans);
   const planCounts = planLabels.map(p => plans[p].count);
+  const totalPlanCount = planCounts.reduce((a, b) => a + b, 0);
+  const totalPlanRev = planLabels.reduce((sum, l) => sum + (plans[l]?.revenue || 0), 0);
   const planColors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#fb7185', '#8b5cf6'];
   const planChartImg = quickChartURL({
     type: 'doughnut',
@@ -656,13 +658,28 @@ function buildEmailHTML() {
     options: {
       cutoutPercentage: 60,
       plugins: {
+        datalabels: {
+          display: true,
+          color: '#ffffff',
+          font: { weight: 'bold', size: 12, family: 'Inter, sans-serif' },
+          formatter: (val) => {
+            const pct = totalPlanCount > 0 ? Math.round((val / totalPlanCount) * 100) : 0;
+            return pct >= 8 ? `${val} (${pct}%)` : '';
+          },
+        },
+        doughnutlabel: {
+          labels: [
+            { text: `${totalPlanCount} Deals`, font: { size: 18, weight: 'bold', family: 'Inter, sans-serif' }, color: '#0f172a' },
+            { text: fmtINR(totalPlanRev), font: { size: 12, weight: 'bold', family: 'Inter, sans-serif' }, color: '#059669' },
+          ],
+        },
         legend: {
           position: 'bottom',
           labels: { font: { size: 11, family: 'Inter, sans-serif' }, boxWidth: 12, padding: 12 },
         },
       },
     },
-  }, 560, 250);
+  }, 560, 260);
 
   // Chart 3: Acquisition Channels Bar Chart
   const sources = todayData.sources || {};
@@ -682,10 +699,23 @@ function buildEmailHTML() {
       }],
     },
     options: {
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'top',
+          color: '#059669',
+          font: { weight: 'bold', size: 11, family: 'Inter, sans-serif' },
+          formatter: (val, ctx) => {
+            const count = sourceCounts[ctx.dataIndex];
+            return `${fmtINR(val)} (${count}d)`;
+          },
+        },
+      },
       scales: {
         x: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { display: false } },
-        y: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { color: '#f1f5f9' } },
+        y: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { color: '#f1f5f9' }, grace: '15%' },
       },
     },
   }, 560, 240);
