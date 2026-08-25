@@ -13,22 +13,24 @@ const CONFIG = {
 };
 
 /* ---------- DOM References ---------- */
-const $kpiGrid         = document.getElementById('kpi-grid');
-const $headerDate      = document.getElementById('header-date');
-const $btnRefresh      = document.getElementById('btn-refresh');
-const $btnSend         = document.getElementById('btn-send-report');
-const $modalOverlay    = document.getElementById('modal-overlay');
-const $modalPreview    = document.getElementById('modal-preview');
-const $modalClose      = document.getElementById('modal-close');
-const $modalCancel     = document.getElementById('modal-cancel');
-const $modalConfirm    = document.getElementById('modal-confirm');
-const $toastContainer  = document.getElementById('toast-container');
+const $kpiGrid          = document.getElementById('kpi-grid');
+const $headerDate       = document.getElementById('header-date');
+const $dateSelect       = document.getElementById('date-select');
+const $btnRefresh       = document.getElementById('btn-refresh');
+const $btnSend          = document.getElementById('btn-send-report');
+const $modalOverlay     = document.getElementById('modal-overlay');
+const $modalPreview     = document.getElementById('modal-preview');
+const $modalClose       = document.getElementById('modal-close');
+const $modalCancel      = document.getElementById('modal-cancel');
+const $modalConfirm     = document.getElementById('modal-confirm');
+const $toastContainer   = document.getElementById('toast-container');
 const $agentLeaderboard = document.getElementById('agent-leaderboard');
 
 /* ---------- State ---------- */
-let allData       = [];
-let todayData     = {};
-let yesterdayData = {};
+let allData           = [];
+let selectedDateIndex = -1;
+let todayData         = {};
+let yesterdayData     = {};
 
 /* ============================================================
    DATA LOADING
@@ -50,10 +52,19 @@ async function fetchData(syncLive = false) {
 
     allData.sort((a, b) => a.date.localeCompare(b.date));
 
-    todayData     = allData[allData.length - 1];
-    yesterdayData = allData.length > 1 ? allData[allData.length - 2] : todayData;
+    if (allData.length === 0) {
+      showToast('No sales records found in dataset.', 'info');
+      return;
+    }
 
-    render();
+    // Default to the latest date
+    if (selectedDateIndex === -1 || selectedDateIndex >= allData.length) {
+      selectedDateIndex = allData.length - 1;
+    }
+
+    selectDate(selectedDateIndex);
+    renderDateSelector();
+
     if (syncLive) {
       showToast('Dashboard updated with latest Google Sheets data!', 'success');
     }
@@ -61,6 +72,27 @@ async function fetchData(syncLive = false) {
     console.error('Failed to load data:', err);
     showToast('Failed to load report data. Check console.', 'error');
   }
+}
+
+function selectDate(index) {
+  selectedDateIndex = index;
+  todayData     = allData[selectedDateIndex];
+  yesterdayData = selectedDateIndex > 0 ? allData[selectedDateIndex - 1] : todayData;
+  render();
+}
+
+function renderDateSelector() {
+  if (!$dateSelect || allData.length === 0) return;
+
+  $dateSelect.innerHTML = allData.map((d, idx) => {
+    const isLatest = idx === allData.length - 1;
+    const isYday   = idx === allData.length - 2;
+    const dateObj  = new Date(d.date + 'T00:00:00');
+    const formatted = dateObj.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+    const tag = isLatest ? ' (Latest)' : isYday ? ' (Yesterday)' : '';
+    const isSelected = idx === selectedDateIndex ? 'selected' : '';
+    return `<option value="${idx}" ${isSelected}>${formatted}${tag}</option>`;
+  }).reverse().join('');
 }
 
 /* ============================================================
@@ -849,6 +881,10 @@ function showToast(message, type = 'info') {
   $toastContainer.appendChild(el);
   setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 4500);
 }
+
+$dateSelect?.addEventListener('change', (e) => {
+  selectDate(parseInt(e.target.value, 10));
+});
 
 $btnRefresh.addEventListener('click', () => fetchData(true));
 $btnSend.addEventListener('click', openModal);

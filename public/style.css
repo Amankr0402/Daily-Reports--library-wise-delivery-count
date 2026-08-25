@@ -168,6 +168,50 @@ body::after {
   white-space: nowrap;
 }
 
+/* ---------- Date Selector Dropdown ---------- */
+.date-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+
+.date-selector-wrapper:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.date-selector-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.date-select {
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  padding: 2px 4px;
+}
+
+.date-select option {
+  background: #0f172a;
+  color: #f1f5f9;
+  padding: 6px;
+}
+
 .btn--primary {
   background: var(--grad-indigo);
   color: #fff;
