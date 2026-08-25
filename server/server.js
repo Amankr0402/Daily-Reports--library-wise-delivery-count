@@ -503,7 +503,7 @@ function buildEmailHTMLServer(allData) {
 
     <!-- Footer -->
     <div style="background:#f8fafc;padding:20px 32px;text-align:center;font-size:12px;color:#94a3b8;border-top:1px solid #e2e8f0;line-height:1.5;">
-      Automated Daily Sales Intelligence Report • Generated at 4:55 PM IST<br />
+      Automated Daily Sales Intelligence Report • Generated at 10:00 AM IST<br />
       Daily Sales &amp; Revenue Analytics Dashboard System
     </div>
   </div>`;
@@ -563,16 +563,16 @@ app.get('/api/sync-sheets', async (req, res) => {
   }
 });
 
-/* ---------- Cron Job: Auto-send daily at 4:55 PM IST ---------- */
+/* ---------- Cron Job: Auto-send daily at 10:00 AM IST ---------- */
 function parseCronExpression(raw) {
-  if (!raw || typeof raw !== 'string') return '55 16 * * *';
+  if (!raw || typeof raw !== 'string') return '0 10 * * *';
   const clean = raw.replace(/^["']|["']$/g, '').trim();
   const parts = clean.split(/\s+/);
   if (parts.length === 5 || parts.length === 6) {
     return clean;
   }
-  console.warn(`⚠️ Invalid CRON_SCHEDULE ("${raw}"). Falling back to default "55 16 * * *".`);
-  return '55 16 * * *';
+  console.warn(`⚠️ Invalid CRON_SCHEDULE ("${raw}"). Falling back to default "0 10 * * *".`);
+  return '0 10 * * *';
 }
 
 const CRON_SCHEDULE = parseCronExpression(process.env.CRON_SCHEDULE);
@@ -600,13 +600,13 @@ try {
         html,
       });
 
-      console.log(`✅ Automated 4:55 PM Sales Report sent — Message ID: ${info.messageId}`);
+      console.log(`✅ Automated 10:00 AM Sales Report sent — Message ID: ${info.messageId}`);
     } catch (err) {
       console.error('❌ Cron email error:', err);
     }
   }, { timezone: 'Asia/Kolkata' });
 
-  console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (4:55 PM IST daily)`);
+  console.log(`📅 Cron scheduled: "${CRON_SCHEDULE}" (10:00 AM IST daily)`);
 } catch (cronErr) {
   console.error('⚠️ Could not schedule cron job:', cronErr.message);
 }
