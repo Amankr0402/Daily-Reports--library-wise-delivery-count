@@ -1915,7 +1915,7 @@
       "serviceable": 894,
       "serviceableWithPct": "894 (57.2%)",
       "serviceablePct": "57.2%",
-      "toyViewed": "533 (59.62%)",
+      "toyViewed": "534 (59.73%)",
       "planPage": "413 (46.20%)",
       "checkoutDrop": "213 (23.83%)",
       "paymentDropout": "11 (1.23%)",
@@ -2134,12 +2134,12 @@
     },
     "userBreakdown": {
       "signups": 1511,
-      "serviceable": 795,
-      "serviceableWithPct": "795 (52.6%)",
-      "serviceablePct": "52.6%",
-      "toyViewed": "542 (68.18%)",
-      "planPage": "408 (51.32%)",
-      "checkoutDrop": "179 (22.52%)",
+      "serviceable": 796,
+      "serviceableWithPct": "796 (52.7%)",
+      "serviceablePct": "52.7%",
+      "toyViewed": "542 (68.09%)",
+      "planPage": "409 (51.38%)",
+      "checkoutDrop": "180 (22.61%)",
       "paymentDropout": "12 (1.51%)",
       "won": "18 (2.26%)"
     }
@@ -2240,7 +2240,7 @@
       "planPage": "400 (45.35%)",
       "checkoutDrop": "212 (24.04%)",
       "paymentDropout": "3 (0.34%)",
-      "won": "13 (1.47%)"
+      "won": "14 (1.59%)"
     }
   },
   {
@@ -2336,13 +2336,13 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 64876,
-    "salesCount": 7,
-    "transactions": 7,
+    "totalRevenue": 86252,
+    "salesCount": 9,
+    "transactions": 9,
     "agents": {
       "Vikas Poonia": {
-        "revenue": 21500,
-        "count": 3
+        "revenue": 31876,
+        "count": 4
       },
       "Amol Landge": {
         "revenue": 10376,
@@ -2359,12 +2359,16 @@
       "Abhijeet Mathur": {
         "revenue": 11000,
         "count": 1
+      },
+      "Chhaya Patel": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 54376,
-        "count": 5
+        "revenue": 75752,
+        "count": 7
       },
       "Quarterly Max": {
         "revenue": 10500,
@@ -2373,24 +2377,24 @@
     },
     "sources": {
       "Organic": {
-        "revenue": 44000,
-        "count": 4
+        "revenue": 55000,
+        "count": 5
       },
       "Renewals": {
-        "revenue": 20876,
-        "count": 3
+        "revenue": 31252,
+        "count": 4
       }
     },
     "userBreakdown": {
-      "signups": 1392,
-      "serviceable": 764,
-      "serviceableWithPct": "764 (54.9%)",
-      "serviceablePct": "54.9%",
-      "toyViewed": "288 (37.70%)",
-      "planPage": "249 (32.59%)",
-      "checkoutDrop": "122 (15.97%)",
-      "paymentDropout": "1 (0.13%)",
-      "won": "6 (0.79%)"
+      "signups": 1555,
+      "serviceable": 855,
+      "serviceableWithPct": "855 (55.0%)",
+      "serviceablePct": "55.0%",
+      "toyViewed": "331 (38.71%)",
+      "planPage": "297 (34.74%)",
+      "checkoutDrop": "143 (16.73%)",
+      "paymentDropout": "2 (0.23%)",
+      "won": "7 (0.82%)"
     }
   }
 ]
