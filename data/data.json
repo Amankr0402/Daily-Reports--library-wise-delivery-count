@@ -187,7 +187,7 @@
       "serviceableWithPct": "1,252 (60.3%)",
       "serviceablePct": "60.3%",
       "toyViewed": "831 (66.37%)",
-      "planPage": "340 (27.16%)",
+      "planPage": "341 (27.24%)",
       "checkoutDrop": "333 (26.60%)",
       "paymentDropout": "12 (0.96%)",
       "won": "24 (1.92%)"
@@ -843,7 +843,7 @@
       "serviceable": 1143,
       "serviceableWithPct": "1,143 (50.2%)",
       "serviceablePct": "50.2%",
-      "toyViewed": "763 (66.75%)",
+      "toyViewed": "764 (66.84%)",
       "planPage": "298 (26.07%)",
       "checkoutDrop": "282 (24.67%)",
       "paymentDropout": "14 (1.22%)",
@@ -1081,14 +1081,14 @@
     },
     "userBreakdown": {
       "signups": 1797,
-      "serviceable": 986,
-      "serviceableWithPct": "986 (54.9%)",
+      "serviceable": 987,
+      "serviceableWithPct": "987 (54.9%)",
       "serviceablePct": "54.9%",
-      "toyViewed": "566 (57.40%)",
-      "planPage": "250 (25.35%)",
-      "checkoutDrop": "222 (22.52%)",
+      "toyViewed": "567 (57.45%)",
+      "planPage": "250 (25.33%)",
+      "checkoutDrop": "222 (22.49%)",
       "paymentDropout": "17 (1.72%)",
-      "won": "18 (1.83%)"
+      "won": "18 (1.82%)"
     }
   },
   {
@@ -1161,7 +1161,7 @@
       "serviceablePct": "50.5%",
       "toyViewed": "430 (57.10%)",
       "planPage": "271 (35.99%)",
-      "checkoutDrop": "187 (24.83%)",
+      "checkoutDrop": "188 (24.97%)",
       "paymentDropout": "7 (0.93%)",
       "won": "16 (2.12%)"
     }
@@ -1551,7 +1551,7 @@
       "serviceable": 645,
       "serviceableWithPct": "645 (58.4%)",
       "serviceablePct": "58.4%",
-      "toyViewed": "401 (62.17%)",
+      "toyViewed": "402 (62.33%)",
       "planPage": "299 (46.36%)",
       "checkoutDrop": "152 (23.57%)",
       "paymentDropout": "4 (0.62%)",
@@ -1713,7 +1713,7 @@
       "serviceable": 810,
       "serviceableWithPct": "810 (57.0%)",
       "serviceablePct": "57.0%",
-      "toyViewed": "544 (67.16%)",
+      "toyViewed": "545 (67.28%)",
       "planPage": "352 (43.46%)",
       "checkoutDrop": "175 (21.60%)",
       "paymentDropout": "9 (1.11%)",
@@ -1916,8 +1916,8 @@
       "serviceableWithPct": "894 (57.2%)",
       "serviceablePct": "57.2%",
       "toyViewed": "533 (59.62%)",
-      "planPage": "412 (46.09%)",
-      "checkoutDrop": "212 (23.71%)",
+      "planPage": "413 (46.20%)",
+      "checkoutDrop": "213 (23.83%)",
       "paymentDropout": "11 (1.23%)",
       "won": "17 (1.90%)"
     }
@@ -2137,8 +2137,8 @@
       "serviceable": 795,
       "serviceableWithPct": "795 (52.6%)",
       "serviceablePct": "52.6%",
-      "toyViewed": "541 (68.05%)",
-      "planPage": "407 (51.19%)",
+      "toyViewed": "542 (68.18%)",
+      "planPage": "408 (51.32%)",
       "checkoutDrop": "179 (22.52%)",
       "paymentDropout": "12 (1.51%)",
       "won": "18 (2.26%)"
@@ -2327,7 +2327,7 @@
       "serviceable": 965,
       "serviceableWithPct": "965 (50.3%)",
       "serviceablePct": "50.3%",
-      "toyViewed": "616 (63.83%)",
+      "toyViewed": "618 (64.04%)",
       "planPage": "399 (41.35%)",
       "checkoutDrop": "208 (21.55%)",
       "paymentDropout": "5 (0.52%)",
@@ -2336,9 +2336,9 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 21376,
-    "salesCount": 2,
-    "transactions": 2,
+    "totalRevenue": 43376,
+    "salesCount": 4,
+    "transactions": 4,
     "agents": {
       "Vikas Poonia": {
         "revenue": 11000,
@@ -2347,18 +2347,26 @@
       "Amol Landge": {
         "revenue": 10376,
         "count": 1
+      },
+      "Shubham Rai": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Jivesh Harde": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 21376,
-        "count": 2
+        "revenue": 43376,
+        "count": 4
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 11000,
-        "count": 1
+        "revenue": 33000,
+        "count": 3
       },
       "Renewals": {
         "revenue": 10376,
@@ -2366,15 +2374,15 @@
       }
     },
     "userBreakdown": {
-      "signups": 876,
-      "serviceable": 475,
-      "serviceableWithPct": "475 (54.2%)",
+      "signups": 1202,
+      "serviceable": 652,
+      "serviceableWithPct": "652 (54.2%)",
       "serviceablePct": "54.2%",
-      "toyViewed": "179 (37.68%)",
-      "planPage": "125 (26.32%)",
-      "checkoutDrop": "66 (13.89%)",
-      "paymentDropout": "1 (0.21%)",
-      "won": "5 (1.05%)"
+      "toyViewed": "253 (38.80%)",
+      "planPage": "196 (30.06%)",
+      "checkoutDrop": "96 (14.72%)",
+      "paymentDropout": "1 (0.15%)",
+      "won": "5 (0.77%)"
     }
   }
 ]
