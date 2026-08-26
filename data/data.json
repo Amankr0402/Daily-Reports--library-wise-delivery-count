@@ -736,7 +736,7 @@
       "serviceable": 1093,
       "serviceableWithPct": "1,093 (55.9%)",
       "serviceablePct": "55.9%",
-      "toyViewed": "658 (60.20%)",
+      "toyViewed": "659 (60.29%)",
       "planPage": "298 (27.26%)",
       "checkoutDrop": "285 (26.08%)",
       "paymentDropout": "12 (1.10%)",
@@ -2324,8 +2324,8 @@
       "serviceableWithPct": "964 (50.2%)",
       "serviceablePct": "50.2%",
       "toyViewed": "611 (63.38%)",
-      "planPage": "394 (40.87%)",
-      "checkoutDrop": "204 (21.16%)",
+      "planPage": "395 (40.98%)",
+      "checkoutDrop": "205 (21.27%)",
       "paymentDropout": "4 (0.41%)",
       "won": "13 (1.35%)"
     }
