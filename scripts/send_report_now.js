@@ -8,7 +8,7 @@ const path = require('path');
 
 const { syncSalesData } = require('./sync_sheets');
 const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
-const SMTP_PASS = process.env.SMTP_PASS || '';
+const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
 const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
 
 const transporter = nodemailer.createTransport({
