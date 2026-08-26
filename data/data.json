@@ -2336,13 +2336,13 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 206596,
-    "salesCount": 21,
-    "transactions": 21,
+    "totalRevenue": 216972,
+    "salesCount": 22,
+    "transactions": 22,
     "agents": {
       "Vikas Poonia": {
-        "revenue": 57628,
-        "count": 7
+        "revenue": 68004,
+        "count": 8
       },
       "Amol Landge": {
         "revenue": 15376,
@@ -2387,8 +2387,8 @@
     },
     "plans": {
       "Annual Max": {
-        "revenue": 186096,
-        "count": 17
+        "revenue": 196472,
+        "count": 18
       },
       "Quarterly Max": {
         "revenue": 10500,
@@ -2405,8 +2405,8 @@
         "count": 13
       },
       "Renewals": {
-        "revenue": 62004,
-        "count": 8
+        "revenue": 72380,
+        "count": 9
       }
     },
     "userBreakdown": {
