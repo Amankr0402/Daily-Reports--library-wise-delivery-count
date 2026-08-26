@@ -2336,17 +2336,17 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 86252,
-    "salesCount": 9,
-    "transactions": 9,
+    "totalRevenue": 179596,
+    "salesCount": 18,
+    "transactions": 18,
     "agents": {
       "Vikas Poonia": {
-        "revenue": 31876,
-        "count": 4
+        "revenue": 52628,
+        "count": 6
       },
       "Amol Landge": {
-        "revenue": 10376,
-        "count": 1
+        "revenue": 15376,
+        "count": 2
       },
       "Shubham Rai": {
         "revenue": 11000,
@@ -2361,28 +2361,48 @@
         "count": 1
       },
       "Chhaya Patel": {
+        "revenue": 32376,
+        "count": 3
+      },
+      "Honey Talreja": {
+        "revenue": 12000,
+        "count": 1
+      },
+      "Preyashi Roy": {
+        "revenue": 12216,
+        "count": 1
+      },
+      "Naveen Suwalka": {
+        "revenue": 11000,
+        "count": 1
+      },
+      "Tanveer Ahmed": {
         "revenue": 11000,
         "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 75752,
-        "count": 7
+        "revenue": 164096,
+        "count": 15
       },
       "Quarterly Max": {
         "revenue": 10500,
         "count": 2
+      },
+      "Annual Mini": {
+        "revenue": 5000,
+        "count": 1
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 55000,
-        "count": 5
+        "revenue": 122592,
+        "count": 11
       },
       "Renewals": {
-        "revenue": 31252,
-        "count": 4
+        "revenue": 57004,
+        "count": 7
       }
     },
     "userBreakdown": {
