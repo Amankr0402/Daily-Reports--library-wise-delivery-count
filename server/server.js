@@ -606,13 +606,6 @@ app.get('/api/report-html', async (req, res) => {
 /* ---------- Trigger Daily Report Endpoint (Sync + Email Send) ---------- */
 const handleTriggerDailyReport = async (req, res) => {
   try {
-    const providedKey = req.headers['x-api-key'] || req.query.key;
-    const expectedKey = process.env.REPORT_API_KEY;
-
-    if (expectedKey && providedKey !== expectedKey) {
-      return res.status(401).json({ error: 'Unauthorized: Invalid API Key' });
-    }
-
     console.log(`🚀 Trigger received — fetching latest live data & sending daily sales report...`);
     
     let allData;
