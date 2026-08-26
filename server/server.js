@@ -36,7 +36,7 @@ app.use('/data', express.static(path.join(__dirname, '..', 'data')));
 
 /* ---------- Nodemailer Transporter ---------- */
 const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
-const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
+const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
 
 const transporter = nodemailer.createTransport({
@@ -579,10 +579,25 @@ const CRON_SCHEDULE = parseCronExpression(process.env.CRON_SCHEDULE);
 
 try {
   cron.schedule(CRON_SCHEDULE, async () => {
-    console.log(`⏰ Cron triggered at ${new Date().toISOString()} — sending daily sales report...`);
+    console.log(`⏰ Cron triggered at ${new Date().toISOString()} — fetching latest data & sending daily sales report...`);
 
     try {
-      const allData = getAllReportData();
+      // 1. Always sync latest live Google Sheets & Metabase data first
+      let allData;
+      try {
+        const { syncSalesData } = require('../scripts/sync_sheets');
+        allData = await syncSalesData();
+        console.log(`📡 Successfully synced ${allData.length} days of data before email trigger.`);
+      } catch (syncErr) {
+        console.warn('⚠️ Could not sync live data during cron, using existing data.json:', syncErr.message);
+        allData = getAllReportData();
+      }
+
+      if (!allData || allData.length === 0) {
+        console.error('❌ No data available to send report.');
+        return;
+      }
+
       const today = allData[allData.length - 1];
       const d = new Date(today.date + 'T00:00:00');
       const dateStr = d.toLocaleDateString('en-IN', {

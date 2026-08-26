@@ -6,8 +6,9 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 
+const { syncSalesData } = require('./sync_sheets');
 const SMTP_USER = process.env.SMTP_USER || 'aman.soni@theelefant.ai';
-const SMTP_PASS = process.env.SMTP_PASS || 'hlbncuynxydsehha';
+const SMTP_PASS = process.env.SMTP_PASS || '';
 const SMTP_FROM = process.env.SMTP_FROM || '"Aman Soni" <aman.soni@theelefant.ai>';
 
 const transporter = nodemailer.createTransport({
@@ -38,8 +39,15 @@ function quickChartURL(config, width = 560, height = 280) {
 }
 
 async function sendDailyReport() {
-  const dataPath = path.join(__dirname, '..', 'data', 'data.json');
-  const allData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  console.log('🔄 Syncing live data from Google Sheets & Metabase before sending report...');
+  let allData;
+  try {
+    allData = await syncSalesData();
+  } catch (err) {
+    console.warn('⚠️ Could not sync live data, using local data.json:', err.message);
+    const dataPath = path.join(__dirname, '..', 'data', 'data.json');
+    allData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
+  }
   allData.sort((a, b) => a.date.localeCompare(b.date));
 
   const today = allData[allData.length - 1];
@@ -446,7 +454,7 @@ async function sendDailyReport() {
   console.log(`📤 Sending report email from ${process.env.SMTP_USER} to: ${toList}`);
 
   const info = await transporter.sendMail({
-    from: `"${process.env.SMTP_FROM || 'Aman Soni'}" <${process.env.SMTP_USER}>`,
+    from: SMTP_FROM,
     to: toList,
     subject: `📈 Daily Sales & Revenue Report — ${dateStr} [${fmtINR(todayRev)}]`,
     html,

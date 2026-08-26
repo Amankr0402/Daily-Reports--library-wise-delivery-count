@@ -8,7 +8,9 @@
 
 /* ---------- Configuration ---------- */
 const CONFIG = {
-  API_BASE: 'http://localhost:3000',
+  API_BASE: window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+    ? window.location.origin
+    : (window.location.origin || 'http://localhost:3000'),
   DATA_URL: '/data/data.json',
 };
 
