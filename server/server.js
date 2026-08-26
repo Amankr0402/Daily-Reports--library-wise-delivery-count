@@ -563,6 +563,57 @@ app.get('/api/sync-sheets', async (req, res) => {
   }
 });
 
+/* ---------- Trigger Daily Report Endpoint ---------- */
+app.post('/api/trigger-daily-report', async (req, res) => {
+  try {
+    const providedKey = req.headers['x-api-key'];
+    const expectedKey = process.env.REPORT_API_KEY;
+
+    if (expectedKey && providedKey !== expectedKey) {
+      return res.status(401).json({ error: 'Unauthorized: Invalid API Key' });
+    }
+
+    console.log(`🚀 Manual trigger received — fetching latest data & sending daily sales report...`);
+    
+    let allData;
+    try {
+      const { syncSalesData } = require('../scripts/sync_sheets');
+      allData = await syncSalesData();
+      console.log(`📡 Successfully synced ${allData.length} days of data before email trigger.`);
+    } catch (syncErr) {
+      console.warn('⚠️ Could not sync live data, using existing data.json:', syncErr.message);
+      allData = getAllReportData();
+    }
+
+    if (!allData || allData.length === 0) {
+      return res.status(500).json({ error: 'No data available to send report.' });
+    }
+
+    const today = allData[allData.length - 1];
+    const d = new Date(today.date + 'T00:00:00');
+    const dateStr = d.toLocaleDateString('en-IN', {
+      month: 'short', day: 'numeric', year: 'numeric',
+    });
+
+    const html = buildEmailHTMLServer(allData);
+    const recipients = getRecipients();
+    const toList = recipients.map(r => `"${r.name}" <${r.email}>`).join(', ');
+
+    const info = await transporter.sendMail({
+      from: SMTP_FROM,
+      to: toList,
+      subject: `📈 Daily Sales Report — ${dateStr} [${fmtINR(today.totalRevenue)}]`,
+      html,
+    });
+
+    console.log(`✅ Manual Sales Report sent — Message ID: ${info.messageId}`);
+    res.json({ success: true, messageId: info.messageId, recipientCount: recipients.length });
+  } catch (err) {
+    console.error('❌ Manual trigger email error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 /* ---------- Cron Job: Auto-send daily at 10:00 AM IST ---------- */
 function parseCronExpression(raw) {
   if (!raw || typeof raw !== 'string') return '0 10 * * *';
