@@ -564,7 +564,7 @@ app.get('/api/sync-sheets', async (req, res) => {
 });
 
 /* ---------- Direct HTML Report Render API ---------- */
-app.get('/api/report-html', async (req, res) => {
+const handleReportHtml = async (req, res) => {
   try {
     let allData;
     try {
@@ -601,7 +601,10 @@ app.get('/api/report-html', async (req, res) => {
     console.error('❌ Error generating report HTML:', err);
     res.status(500).send(`<pre>Error generating report: ${err.message}</pre>`);
   }
-});
+};
+
+app.get('/api/report-html', handleReportHtml);
+app.post('/api/report-html', handleReportHtml);
 
 /* ---------- Trigger Daily Report Endpoint (Sync + Email Send) ---------- */
 const handleTriggerDailyReport = async (req, res) => {
