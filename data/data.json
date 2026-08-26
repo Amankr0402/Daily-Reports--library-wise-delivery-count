@@ -2336,13 +2336,13 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 43376,
-    "salesCount": 4,
-    "transactions": 4,
+    "totalRevenue": 64876,
+    "salesCount": 7,
+    "transactions": 7,
     "agents": {
       "Vikas Poonia": {
-        "revenue": 11000,
-        "count": 1
+        "revenue": 21500,
+        "count": 3
       },
       "Amol Landge": {
         "revenue": 10376,
@@ -2355,22 +2355,30 @@
       "Jivesh Harde": {
         "revenue": 11000,
         "count": 1
+      },
+      "Abhijeet Mathur": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 43376,
-        "count": 4
+        "revenue": 54376,
+        "count": 5
+      },
+      "Quarterly Max": {
+        "revenue": 10500,
+        "count": 2
       }
     },
     "sources": {
       "Organic": {
-        "revenue": 33000,
-        "count": 3
+        "revenue": 44000,
+        "count": 4
       },
       "Renewals": {
-        "revenue": 10376,
-        "count": 1
+        "revenue": 20876,
+        "count": 3
       }
     },
     "userBreakdown": {
