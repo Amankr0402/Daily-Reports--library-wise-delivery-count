@@ -563,17 +563,57 @@ app.get('/api/sync-sheets', async (req, res) => {
   }
 });
 
-/* ---------- Trigger Daily Report Endpoint ---------- */
-app.post('/api/trigger-daily-report', async (req, res) => {
+/* ---------- Direct HTML Report Render API ---------- */
+app.get('/api/report-html', async (req, res) => {
   try {
-    const providedKey = req.headers['x-api-key'];
+    let allData;
+    try {
+      const { syncSalesData } = require('../scripts/sync_sheets');
+      allData = await syncSalesData();
+    } catch (syncErr) {
+      console.warn('⚠️ Could not sync live data, using existing data.json:', syncErr.message);
+      allData = getAllReportData();
+    }
+
+    if (!allData || allData.length === 0) {
+      return res.status(500).send('<h3>No sales data available.</h3>');
+    }
+
+    const html = buildEmailHTMLServer(allData);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Daily Sales & Revenue Report</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            body { margin: 0; padding: 20px; background: #0f172a; display: flex; justify-content: center; }
+          </style>
+        </head>
+        <body>
+          ${html}
+        </body>
+      </html>
+    `);
+  } catch (err) {
+    console.error('❌ Error generating report HTML:', err);
+    res.status(500).send(`<pre>Error generating report: ${err.message}</pre>`);
+  }
+});
+
+/* ---------- Trigger Daily Report Endpoint (Sync + Email Send) ---------- */
+const handleTriggerDailyReport = async (req, res) => {
+  try {
+    const providedKey = req.headers['x-api-key'] || req.query.key;
     const expectedKey = process.env.REPORT_API_KEY;
 
     if (expectedKey && providedKey !== expectedKey) {
       return res.status(401).json({ error: 'Unauthorized: Invalid API Key' });
     }
 
-    console.log(`🚀 Manual trigger received — fetching latest data & sending daily sales report...`);
+    console.log(`🚀 Trigger received — fetching latest live data & sending daily sales report...`);
     
     let allData;
     try {
@@ -606,13 +646,16 @@ app.post('/api/trigger-daily-report', async (req, res) => {
       html,
     });
 
-    console.log(`✅ Manual Sales Report sent — Message ID: ${info.messageId}`);
-    res.json({ success: true, messageId: info.messageId, recipientCount: recipients.length });
+    console.log(`✅ Daily Sales Report sent — Message ID: ${info.messageId}`);
+    res.json({ success: true, messageId: info.messageId, recipientCount: recipients.length, date: dateStr });
   } catch (err) {
-    console.error('❌ Manual trigger email error:', err);
+    console.error('❌ Trigger email error:', err);
     res.status(500).json({ error: err.message });
   }
-});
+};
+
+app.post('/api/trigger-daily-report', handleTriggerDailyReport);
+app.get('/api/trigger-daily-report', handleTriggerDailyReport);
 
 /* ---------- Cron Job: Auto-send daily at 10:00 AM IST ---------- */
 function parseCronExpression(raw) {
