@@ -2146,9 +2146,9 @@
   },
   {
     "date": "2026-08-24",
-    "totalRevenue": 196308,
-    "salesCount": 21,
-    "transactions": 21,
+    "totalRevenue": 207308,
+    "salesCount": 22,
+    "transactions": 22,
     "agents": {
       "Prerak Bhavsar": {
         "revenue": 12500,
@@ -2197,12 +2197,16 @@
       "Tanveer Ahmed": {
         "revenue": 22000,
         "count": 2
+      },
+      "Ishika Gorle": {
+        "revenue": 11000,
+        "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 162808,
-        "count": 15
+        "revenue": 173808,
+        "count": 16
       },
       "Quarterly Max": {
         "revenue": 19500,
@@ -2219,8 +2223,8 @@
     },
     "sources": {
       "Organic": {
-        "revenue": 178932,
-        "count": 19
+        "revenue": 189932,
+        "count": 20
       },
       "Renewals": {
         "revenue": 17376,
@@ -2332,24 +2336,32 @@
   },
   {
     "date": "2026-08-26",
-    "totalRevenue": 11000,
-    "salesCount": 1,
-    "transactions": 1,
+    "totalRevenue": 21376,
+    "salesCount": 2,
+    "transactions": 2,
     "agents": {
       "Vikas Poonia": {
         "revenue": 11000,
+        "count": 1
+      },
+      "Amol Landge": {
+        "revenue": 10376,
         "count": 1
       }
     },
     "plans": {
       "Annual Max": {
-        "revenue": 11000,
-        "count": 1
+        "revenue": 21376,
+        "count": 2
       }
     },
     "sources": {
       "Organic": {
         "revenue": 11000,
+        "count": 1
+      },
+      "Renewals": {
+        "revenue": 10376,
         "count": 1
       }
     },
