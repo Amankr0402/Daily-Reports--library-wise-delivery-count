@@ -2320,13 +2320,13 @@
     },
     "userBreakdown": {
       "signups": 1920,
-      "serviceable": 964,
-      "serviceableWithPct": "964 (50.2%)",
-      "serviceablePct": "50.2%",
-      "toyViewed": "612 (63.49%)",
-      "planPage": "397 (41.18%)",
-      "checkoutDrop": "206 (21.37%)",
-      "paymentDropout": "4 (0.41%)",
+      "serviceable": 965,
+      "serviceableWithPct": "965 (50.3%)",
+      "serviceablePct": "50.3%",
+      "toyViewed": "614 (63.63%)",
+      "planPage": "398 (41.24%)",
+      "checkoutDrop": "207 (21.45%)",
+      "paymentDropout": "5 (0.52%)",
       "won": "13 (1.35%)"
     }
   }
