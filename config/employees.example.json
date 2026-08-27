@@ -1,12 +1,16 @@
 {
   "recipients": [
     {
-      "name": "Team Lead",
-      "email": "sales-lead@example.com"
+      "name": "Govind Parmar",
+      "email": "govind.parmar@theelefant.ai"
     },
     {
-      "name": "Sales Representative",
-      "email": "agent@example.com"
+      "name": "Aman Soni",
+      "email": "aman.soni@theelefant.ai"
+    },
+    {
+      "name": "Vaaneet Kapoor",
+      "email": "vaaneet.kapoor@theelefant.ai"
     }
   ]
 }
