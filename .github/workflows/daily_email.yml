@@ -2,8 +2,10 @@ name: Automated Daily Sales Report Email
 
 on:
   schedule:
-    # 10:00 AM IST is 04:30 AM UTC (IST is UTC + 5:30)
-    - cron: '30 4 * * *'
+    # Multiple offset triggers around 10:00 AM IST to bypass GitHub queue delays
+    - cron: '25 4 * * *'   # 09:55 AM IST
+    - cron: '30 4 * * *'   # 10:00 AM IST
+    - cron: '35 4 * * *'   # 10:05 AM IST
   workflow_dispatch:
 
 jobs:
