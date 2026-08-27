@@ -58,29 +58,29 @@ async function sendDailyReport() {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   });
 
-  const todayRev     = today.totalRevenue || 0;
+  const todayRev = today.totalRevenue || 0;
   const yesterdayRev = yesterday.totalRevenue || 0;
-  const diffRev      = todayRev - yesterdayRev;
-  const diffRevStr   = (diffRev >= 0 ? '+' : '') + fmtINR(diffRev);
-  const diffColor    = diffRev >= 0 ? '#059669' : '#e11d48';
+  const diffRev = todayRev - yesterdayRev;
+  const diffRevStr = (diffRev >= 0 ? '+' : '') + fmtINR(diffRev);
+  const diffColor = diffRev >= 0 ? '#059669' : '#e11d48';
 
-  const todayCount     = today.salesCount || 0;
+  const todayCount = today.salesCount || 0;
   const yesterdayCount = yesterday.salesCount || 0;
-  const diffCount      = todayCount - yesterdayCount;
-  const diffCountStr   = (diffCount >= 0 ? '+' : '') + diffCount;
+  const diffCount = todayCount - yesterdayCount;
+  const diffCountStr = (diffCount >= 0 ? '+' : '') + diffCount;
   const diffCountColor = diffCount >= 0 ? '#059669' : '#e11d48';
 
-  const todayAOV     = todayCount > 0 ? Math.round(todayRev / todayCount) : 0;
+  const todayAOV = todayCount > 0 ? Math.round(todayRev / todayCount) : 0;
   const yesterdayAOV = yesterdayCount > 0 ? Math.round(yesterdayRev / yesterdayCount) : 0;
-  const diffAOV      = todayAOV - yesterdayAOV;
-  const diffAOVStr   = (diffAOV >= 0 ? '+' : '') + fmtINR(diffAOV);
+  const diffAOV = todayAOV - yesterdayAOV;
+  const diffAOVStr = (diffAOV >= 0 ? '+' : '') + fmtINR(diffAOV);
   const diffAOVColor = diffAOV >= 0 ? '#059669' : '#e11d48';
 
   const organicCount = today.sources?.Organic?.count || 0;
-  const organicRev   = today.sources?.Organic?.revenue || 0;
+  const organicRev = today.sources?.Organic?.revenue || 0;
 
   const renewalCount = (today.sources?.Renewals?.count || 0) + (today.sources?.Upgrade?.count || 0);
-  const renewalRev   = (today.sources?.Renewals?.revenue || 0) + (today.sources?.Upgrade?.revenue || 0);
+  const renewalRev = (today.sources?.Renewals?.revenue || 0) + (today.sources?.Upgrade?.revenue || 0);
 
   const sortedAgents = Object.entries(today.agents || {}).sort((a, b) => b[1].revenue - a[1].revenue);
   const topAgent = sortedAgents.length > 0 ? sortedAgents[0] : ['—', { revenue: 0, count: 0 }];
@@ -190,6 +190,39 @@ async function sendDailyReport() {
       },
     },
   }, 560, 240);
+
+  // --- MOCK DATA FOR LIBRARY-WISE DELIVERY COUNT ---
+  const libraryLabels = ['Ahmedabad HUB', 'Andheri Hub - Mumbai', 'Delhi HUB', 'Gurgaon Hub', 'Hyderabad Hub', 'Indore Hub', 'Nagpur Hub'];
+  const libraryCounts = [133, 83, 50, 32, 61, 7, 4];
+
+  const libraryChartImg = quickChartURL({
+    type: 'horizontalBar',
+    data: {
+      labels: libraryLabels,
+      datasets: [{
+        label: 'Delivered Orders',
+        data: libraryCounts,
+        backgroundColor: '#10b981',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'right',
+          color: '#0f172a',
+          font: { weight: 'bold', size: 10, family: 'Inter, sans-serif' }
+        }
+      },
+      scales: {
+        x: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { display: false }, grace: '15%' },
+        y: { ticks: { font: { size: 10, family: 'Inter, sans-serif' } }, grid: { display: false } }
+      }
+    }
+  }, 560, 300);
 
   const html = `
   <div style="font-family:'Inter',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
@@ -329,9 +362,9 @@ async function sendDailyReport() {
         </thead>
         <tbody>
           ${planLabels.map((p) => {
-            const pData = plans[p] || { count: 0, revenue: 0 };
-            const pShare = todayRev > 0 ? ((pData.revenue / todayRev) * 100).toFixed(1) : 0;
-            return `
+    const pData = plans[p] || { count: 0, revenue: 0 };
+    const pShare = todayRev > 0 ? ((pData.revenue / todayRev) * 100).toFixed(1) : 0;
+    return `
               <tr style="border-bottom:1px solid #f1f5f9;">
                 <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${p}</td>
                 <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${pData.count}</td>
@@ -339,7 +372,7 @@ async function sendDailyReport() {
                 <td style="padding:9px 12px;text-align:right;color:#64748b;font-weight:600;">${pShare}%</td>
               </tr>
             `;
-          }).join('')}
+  }).join('')}
         </tbody>
       </table>
     </div>
@@ -362,15 +395,15 @@ async function sendDailyReport() {
         </thead>
         <tbody>
           ${sourceLabels.map((s) => {
-            const sData = sources[s] || { count: 0, revenue: 0 };
-            return `
+    const sData = sources[s] || { count: 0, revenue: 0 };
+    return `
               <tr style="border-bottom:1px solid #f1f5f9;">
                 <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${s}</td>
                 <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${sData.count}</td>
                 <td style="padding:9px 12px;text-align:right;font-weight:700;color:#059669;">${fmtINR(sData.revenue)}</td>
               </tr>
             `;
-          }).join('')}
+  }).join('')}
         </tbody>
       </table>
     </div>
@@ -420,10 +453,10 @@ async function sendDailyReport() {
         </thead>
         <tbody>
           ${sortedAgents.map(([agent, val], idx) => {
-            const rank = idx + 1;
-            const badgeBg = rank === 1 ? '#fef3c7' : rank === 2 ? '#e2e8f0' : rank === 3 ? '#ffedd5' : '#f1f5f9';
-            const badgeColor = rank === 1 ? '#b45309' : rank === 2 ? '#475569' : rank === 3 ? '#c2410c' : '#64748b';
-            return `
+    const rank = idx + 1;
+    const badgeBg = rank === 1 ? '#fef3c7' : rank === 2 ? '#e2e8f0' : rank === 3 ? '#ffedd5' : '#f1f5f9';
+    const badgeColor = rank === 1 ? '#b45309' : rank === 2 ? '#475569' : rank === 3 ? '#c2410c' : '#64748b';
+    return `
               <tr style="border-bottom:1px solid #f1f5f9;${rank === 1 ? 'background:#fffbeb;' : ''}">
                 <td style="padding:9px 12px;">
                   <span style="display:inline-block;background:${badgeBg};color:${badgeColor};font-weight:800;font-size:11px;padding:2px 8px;border-radius:10px;">
@@ -435,7 +468,35 @@ async function sendDailyReport() {
                 <td style="padding:9px 12px;text-align:right;font-weight:700;color:#059669;">${fmtINR(val.revenue)}</td>
               </tr>
             `;
-          }).join('')}
+  }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. LIBRARY-WISE DELIVERY COUNT -->
+    <div style="padding:0 32px 28px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📦 Library-wise Delivery Count</h2>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;">
+        <img src="${libraryChartImg}" alt="Library Delivery Count" style="width:100%;max-width:580px;height:auto;display:block;margin:0 auto;border-radius:6px;" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Hub Name</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Delivered Orders</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${libraryLabels.map((lbl, i) => {
+    return `
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${lbl}</td>
+                <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${libraryCounts[i]}</td>
+              </tr>
+            `;
+  }).join('')}
         </tbody>
       </table>
     </div>

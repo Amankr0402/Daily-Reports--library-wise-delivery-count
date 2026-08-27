@@ -231,6 +231,39 @@ function buildEmailHTMLServer(allData) {
     },
   }, 560, 240);
 
+  // --- MOCK DATA FOR LIBRARY-WISE DELIVERY COUNT ---
+  const libraryLabels = ['Ahmedabad HUB', 'Andheri Hub - Mumbai', 'Delhi HUB', 'Gurgaon Hub', 'Hyderabad Hub', 'Indore Hub', 'Nagpur Hub'];
+  const libraryCounts = [133, 83, 50, 32, 61, 7, 4];
+  
+  const libraryChartImg = quickChartURL({
+    type: 'horizontalBar',
+    data: {
+      labels: libraryLabels,
+      datasets: [{
+        label: 'Delivered Orders',
+        data: libraryCounts,
+        backgroundColor: '#10b981',
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          display: true,
+          anchor: 'end',
+          align: 'right',
+          color: '#0f172a',
+          font: { weight: 'bold', size: 10, family: 'Inter, sans-serif' }
+        }
+      },
+      scales: {
+        xAxes: [{ ticks: { fontColor: '#64748b', fontSize: 10, fontFamily: 'Inter, sans-serif' }, gridLines: { display: false } }],
+        yAxes: [{ ticks: { fontColor: '#64748b', fontSize: 10, fontFamily: 'Inter, sans-serif' }, gridLines: { display: false } }]
+      }
+    }
+  }, 560, 300);
+
   return `
   <div style="font-family:'Inter',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;max-width:680px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 8px 30px rgba(0,0,0,0.06);">
 
@@ -499,6 +532,34 @@ function buildEmailHTMLServer(allData) {
         </table>
       </div>
 
+    </div>
+
+    <!-- ================= 6. LIBRARY-WISE DELIVERY COUNT ================= -->
+    <div style="padding:0 32px 28px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h2 style="margin:0;font-size:16px;color:#0f172a;font-weight:800;">📦 Library-wise Delivery Count</h2>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;">
+        <img src="${libraryChartImg}" alt="Library Delivery Count" style="width:100%;max-width:580px;height:auto;display:block;margin:0 auto;border-radius:6px;" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;color:#475569;text-align:left;">
+            <th style="padding:9px 12px;font-weight:700;">Hub Name</th>
+            <th style="padding:9px 12px;text-align:center;font-weight:700;">Delivered Orders</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${libraryLabels.map((lbl, i) => {
+            return `
+              <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="padding:9px 12px;font-weight:600;color:#1e293b;">${lbl}</td>
+                <td style="padding:9px 12px;text-align:center;color:#64748b;font-weight:600;">${libraryCounts[i]}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
     </div>
 
     <!-- Footer -->

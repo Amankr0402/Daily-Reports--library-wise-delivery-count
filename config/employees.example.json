@@ -1,16 +1,8 @@
 {
   "recipients": [
     {
-      "name": "Govind Parmar",
-      "email": "govind.parmar@theelefant.ai"
-    },
-    {
       "name": "Aman Soni",
       "email": "aman.soni@theelefant.ai"
-    },
-    {
-      "name": "Vaaneet Kapoor",
-      "email": "vaaneet.kapoor@theelefant.ai"
     }
   ]
 }
