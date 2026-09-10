@@ -642,12 +642,12 @@
     },
     "userBreakdown": {
       "signups": 1948,
-      "serviceable": 1022,
-      "serviceableWithPct": "1,022 (52.5%)",
+      "serviceable": 1023,
+      "serviceableWithPct": "1,023 (52.5%)",
       "serviceablePct": "52.5%",
-      "toyViewed": "642 (62.82%)",
-      "planPage": "277 (27.10%)",
-      "checkoutDrop": "263 (25.73%)",
+      "toyViewed": "643 (62.85%)",
+      "planPage": "277 (27.08%)",
+      "checkoutDrop": "263 (25.71%)",
       "paymentDropout": "6 (0.59%)",
       "won": "19 (1.86%)"
     }
@@ -840,12 +840,12 @@
     },
     "userBreakdown": {
       "signups": 2284,
-      "serviceable": 1150,
-      "serviceableWithPct": "1,150 (50.4%)",
+      "serviceable": 1151,
+      "serviceableWithPct": "1,151 (50.4%)",
       "serviceablePct": "50.4%",
-      "toyViewed": "769 (66.87%)",
-      "planPage": "314 (27.30%)",
-      "checkoutDrop": "295 (25.65%)",
+      "toyViewed": "770 (66.90%)",
+      "planPage": "314 (27.28%)",
+      "checkoutDrop": "295 (25.63%)",
       "paymentDropout": "14 (1.22%)",
       "won": "22 (1.91%)"
     }
@@ -1006,7 +1006,7 @@
       "serviceableWithPct": "1,092 (54.9%)",
       "serviceablePct": "54.9%",
       "toyViewed": "688 (63.00%)",
-      "planPage": "317 (29.03%)",
+      "planPage": "318 (29.12%)",
       "checkoutDrop": "288 (26.37%)",
       "paymentDropout": "11 (1.01%)",
       "won": "21 (1.92%)"
@@ -1239,12 +1239,12 @@
     },
     "userBreakdown": {
       "signups": 1734,
-      "serviceable": 870,
-      "serviceableWithPct": "870 (50.2%)",
+      "serviceable": 871,
+      "serviceableWithPct": "871 (50.2%)",
       "serviceablePct": "50.2%",
-      "toyViewed": "580 (66.67%)",
-      "planPage": "411 (47.24%)",
-      "checkoutDrop": "208 (23.91%)",
+      "toyViewed": "580 (66.59%)",
+      "planPage": "411 (47.19%)",
+      "checkoutDrop": "208 (23.88%)",
       "paymentDropout": "12 (1.38%)",
       "won": "15 (1.72%)"
     }
@@ -2020,7 +2020,7 @@
       "serviceablePct": "55.7%",
       "toyViewed": "613 (70.06%)",
       "planPage": "402 (45.94%)",
-      "checkoutDrop": "208 (23.77%)",
+      "checkoutDrop": "209 (23.89%)",
       "paymentDropout": "10 (1.14%)",
       "won": "23 (2.63%)"
     }
@@ -2328,10 +2328,10 @@
       "serviceableWithPct": "973 (50.5%)",
       "serviceablePct": "50.5%",
       "toyViewed": "638 (65.57%)",
-      "planPage": "438 (45.02%)",
-      "checkoutDrop": "237 (24.36%)",
+      "planPage": "439 (45.12%)",
+      "checkoutDrop": "238 (24.46%)",
       "paymentDropout": "8 (0.82%)",
-      "won": "20 (2.06%)"
+      "won": "21 (2.16%)"
     }
   },
   {
@@ -2518,8 +2518,8 @@
       "serviceableWithPct": "1,156 (53.4%)",
       "serviceablePct": "53.4%",
       "toyViewed": "622 (53.81%)",
-      "planPage": "526 (45.50%)",
-      "checkoutDrop": "239 (20.67%)",
+      "planPage": "529 (45.76%)",
+      "checkoutDrop": "241 (20.85%)",
       "paymentDropout": "14 (1.21%)",
       "won": "19 (1.64%)"
     }
@@ -2588,7 +2588,7 @@
       "serviceable": 861,
       "serviceableWithPct": "861 (52.9%)",
       "serviceablePct": "52.9%",
-      "toyViewed": "491 (57.03%)",
+      "toyViewed": "492 (57.14%)",
       "planPage": "399 (46.34%)",
       "checkoutDrop": "195 (22.65%)",
       "paymentDropout": "2 (0.23%)",
@@ -2889,7 +2889,7 @@
       "serviceable": 1109,
       "serviceableWithPct": "1,109 (54.9%)",
       "serviceablePct": "54.9%",
-      "toyViewed": "549 (49.50%)",
+      "toyViewed": "550 (49.59%)",
       "planPage": "475 (42.83%)",
       "checkoutDrop": "241 (21.73%)",
       "paymentDropout": "17 (1.53%)",
