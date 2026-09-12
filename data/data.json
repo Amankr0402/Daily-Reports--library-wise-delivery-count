@@ -911,12 +911,12 @@
     },
     "userBreakdown": {
       "signups": 2154,
-      "serviceable": 1134,
-      "serviceableWithPct": "1,134 (52.6%)",
-      "serviceablePct": "52.6%",
-      "toyViewed": "715 (63.05%)",
-      "planPage": "329 (29.01%)",
-      "checkoutDrop": "292 (25.75%)",
+      "serviceable": 1135,
+      "serviceableWithPct": "1,135 (52.7%)",
+      "serviceablePct": "52.7%",
+      "toyViewed": "716 (63.08%)",
+      "planPage": "330 (29.07%)",
+      "checkoutDrop": "293 (25.81%)",
       "paymentDropout": "14 (1.23%)",
       "won": "16 (1.41%)"
     }
