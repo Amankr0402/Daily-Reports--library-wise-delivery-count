@@ -596,8 +596,8 @@
       "serviceableWithPct": "1,152 (55.6%)",
       "serviceablePct": "55.6%",
       "toyViewed": "650 (56.42%)",
-      "planPage": "290 (25.17%)",
-      "checkoutDrop": "272 (23.61%)",
+      "planPage": "291 (25.26%)",
+      "checkoutDrop": "273 (23.70%)",
       "paymentDropout": "6 (0.52%)",
       "won": "19 (1.65%)"
     }
@@ -1665,7 +1665,7 @@
       "serviceablePct": "61.4%",
       "toyViewed": "561 (57.95%)",
       "planPage": "383 (39.57%)",
-      "checkoutDrop": "202 (20.87%)",
+      "checkoutDrop": "203 (20.97%)",
       "paymentDropout": "11 (1.14%)",
       "won": "9 (0.93%)"
     }
@@ -1866,8 +1866,8 @@
       "serviceableWithPct": "1,036 (60.8%)",
       "serviceablePct": "60.8%",
       "toyViewed": "552 (53.28%)",
-      "planPage": "443 (42.76%)",
-      "checkoutDrop": "241 (23.26%)",
+      "planPage": "444 (42.86%)",
+      "checkoutDrop": "242 (23.36%)",
       "paymentDropout": "15 (1.45%)",
       "won": "25 (2.41%)"
     }
@@ -2376,7 +2376,7 @@
       "serviceable": 1461,
       "serviceableWithPct": "1,461 (60.0%)",
       "serviceablePct": "60.0%",
-      "toyViewed": "707 (48.39%)",
+      "toyViewed": "708 (48.46%)",
       "planPage": "587 (40.18%)",
       "checkoutDrop": "304 (20.81%)",
       "paymentDropout": "13 (0.89%)",
@@ -2539,8 +2539,8 @@
       "serviceableWithPct": "948 (55.5%)",
       "serviceablePct": "55.5%",
       "toyViewed": "498 (52.53%)",
-      "planPage": "419 (44.20%)",
-      "checkoutDrop": "210 (22.15%)",
+      "planPage": "420 (44.30%)",
+      "checkoutDrop": "211 (22.26%)",
       "paymentDropout": "2 (0.21%)",
       "won": "6 (0.63%)"
     }
@@ -2744,9 +2744,9 @@
       "serviceable": 1511,
       "serviceableWithPct": "1,511 (58.2%)",
       "serviceablePct": "58.2%",
-      "toyViewed": "794 (52.55%)",
-      "planPage": "683 (45.20%)",
-      "checkoutDrop": "322 (21.31%)",
+      "toyViewed": "795 (52.61%)",
+      "planPage": "684 (45.27%)",
+      "checkoutDrop": "323 (21.38%)",
       "paymentDropout": "8 (0.53%)",
       "won": "17 (1.13%)"
     }
