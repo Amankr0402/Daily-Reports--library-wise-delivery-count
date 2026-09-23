@@ -758,17 +758,7 @@
         "count": 3
       }
     },
-    "userBreakdown": {
-      "signups": 2433,
-      "serviceable": 1303,
-      "serviceableWithPct": "1,303 (53.6%)",
-      "serviceablePct": "53.6%",
-      "toyViewed": "779 (59.79%)",
-      "planPage": "329 (25.25%)",
-      "checkoutDrop": "307 (23.56%)",
-      "paymentDropout": "15 (1.15%)",
-      "won": "27 (2.07%)"
-    }
+    "userBreakdown": null
   },
   {
     "date": "2026-08-10",
@@ -2508,7 +2498,7 @@
       "serviceable": 950,
       "serviceableWithPct": "950 (55.6%)",
       "serviceablePct": "55.6%",
-      "toyViewed": "500 (52.63%)",
+      "toyViewed": "501 (52.74%)",
       "planPage": "423 (44.53%)",
       "checkoutDrop": "215 (22.63%)",
       "paymentDropout": "2 (0.21%)",
@@ -2715,7 +2705,7 @@
       "serviceableWithPct": "1,512 (58.3%)",
       "serviceablePct": "58.3%",
       "toyViewed": "797 (52.71%)",
-      "planPage": "688 (45.50%)",
+      "planPage": "689 (45.57%)",
       "checkoutDrop": "327 (21.63%)",
       "paymentDropout": "8 (0.53%)",
       "won": "17 (1.12%)"
