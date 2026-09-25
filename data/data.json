@@ -900,17 +900,7 @@
         "count": 1
       }
     },
-    "userBreakdown": {
-      "signups": 2065,
-      "serviceable": 1172,
-      "serviceableWithPct": "1,172 (56.8%)",
-      "serviceablePct": "56.8%",
-      "toyViewed": "696 (59.39%)",
-      "planPage": "330 (28.16%)",
-      "checkoutDrop": "303 (25.85%)",
-      "paymentDropout": "12 (1.02%)",
-      "won": "22 (1.88%)"
-    }
+    "userBreakdown": null
   },
   {
     "date": "2026-08-12",
