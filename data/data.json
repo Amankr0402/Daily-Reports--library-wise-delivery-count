@@ -1845,12 +1845,12 @@
     },
     "userBreakdown": {
       "signups": 1673,
-      "serviceable": 980,
-      "serviceableWithPct": "980 (58.6%)",
+      "serviceable": 981,
+      "serviceableWithPct": "981 (58.6%)",
       "serviceablePct": "58.6%",
-      "toyViewed": "616 (62.86%)",
-      "planPage": "418 (42.65%)",
-      "checkoutDrop": "225 (22.96%)",
+      "toyViewed": "617 (62.90%)",
+      "planPage": "419 (42.71%)",
+      "checkoutDrop": "225 (22.94%)",
       "paymentDropout": "11 (1.12%)",
       "won": "25 (2.55%)"
     }
@@ -2153,13 +2153,13 @@
       }
     },
     "userBreakdown": {
-      "signups": 2021,
-      "serviceable": 1071,
-      "serviceableWithPct": "1,071 (53.0%)",
+      "signups": 2022,
+      "serviceable": 1072,
+      "serviceableWithPct": "1,072 (53.0%)",
       "serviceablePct": "53.0%",
-      "toyViewed": "643 (60.04%)",
-      "planPage": "460 (42.95%)",
-      "checkoutDrop": "254 (23.72%)",
+      "toyViewed": "645 (60.17%)",
+      "planPage": "462 (43.10%)",
+      "checkoutDrop": "255 (23.79%)",
       "paymentDropout": "9 (0.84%)",
       "won": "22 (2.05%)"
     }
@@ -2257,8 +2257,8 @@
       "serviceableWithPct": "1,460 (60.0%)",
       "serviceablePct": "60.0%",
       "toyViewed": "710 (48.63%)",
-      "planPage": "600 (41.10%)",
-      "checkoutDrop": "314 (21.51%)",
+      "planPage": "601 (41.16%)",
+      "checkoutDrop": "315 (21.58%)",
       "paymentDropout": "13 (0.89%)",
       "won": "32 (2.19%)"
     }
@@ -2419,8 +2419,8 @@
       "serviceableWithPct": "951 (55.6%)",
       "serviceablePct": "55.6%",
       "toyViewed": "504 (53.00%)",
-      "planPage": "430 (45.22%)",
-      "checkoutDrop": "225 (23.66%)",
+      "planPage": "431 (45.32%)",
+      "checkoutDrop": "226 (23.76%)",
       "paymentDropout": "2 (0.21%)",
       "won": "6 (0.63%)"
     }
@@ -2625,7 +2625,7 @@
       "serviceableWithPct": "1,511 (58.3%)",
       "serviceablePct": "58.3%",
       "toyViewed": "797 (52.75%)",
-      "planPage": "695 (46.00%)",
+      "planPage": "696 (46.06%)",
       "checkoutDrop": "330 (21.84%)",
       "paymentDropout": "9 (0.60%)",
       "won": "17 (1.13%)"
